@@ -81,4 +81,9 @@ public class StatementInstrumentation extends ClassInstanceMethodsEnhancePluginD
     @Override protected ClassMatch enhanceClass() {
         return byMultiClassMatch(STATEMENT_CLASS_NAME, MYSQL6_STATEMENT_CLASS_NAME);
     }
+
+
+    @Override protected String[] witnessClasses() {
+        return new String[] {"com.mysql.jdbc.ConnectionImpl"};
+    }
 }

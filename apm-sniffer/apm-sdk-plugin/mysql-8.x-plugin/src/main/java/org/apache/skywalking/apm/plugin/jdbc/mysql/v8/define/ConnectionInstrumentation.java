@@ -17,7 +17,7 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -55,7 +55,7 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
                 }
 
                 @Override public String getMethodsInterceptor() {
-                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.CreatePreparedStatementInterceptor";
+                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.CreatePreparedStatementInterceptor";
                 }
 
                 @Override public boolean isOverrideArgs() {
@@ -68,7 +68,7 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
                 }
 
                 @Override public String getMethodsInterceptor() {
-                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.CreateCallableStatementInterceptor";
+                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.CreateCallableStatementInterceptor";
                 }
 
                 @Override public boolean isOverrideArgs() {
@@ -81,7 +81,7 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
                 }
 
                 @Override public String getMethodsInterceptor() {
-                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.CreateStatementInterceptor";
+                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.CreateStatementInterceptor";
                 }
 
                 @Override public boolean isOverrideArgs() {
@@ -107,7 +107,7 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
                 }
 
                 @Override public String getMethodsInterceptor() {
-                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.SetCatalogInterceptor";
+                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.SetCatalogInterceptor";
                 }
 
                 @Override public boolean isOverrideArgs() {
@@ -118,10 +118,10 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
 
     }
 
-    @Override protected abstract ClassMatch enhanceClass();
-
-
-    @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+    @Override
+    protected String[] witnessClasses() {
+        return new String[] {"com.mysql.cj.interceptors.QueryInterceptor"};
     }
+
+    @Override protected abstract ClassMatch enhanceClass();
 }

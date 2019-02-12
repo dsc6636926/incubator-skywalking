@@ -17,7 +17,7 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
 
 import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
@@ -35,7 +35,8 @@ public class DriverInstrumentation extends AbstractDriverInstrumentation {
         return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
     }
 
-    @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+    @Override
+    protected String[] witnessClasses() {
+        return new String[] {"com.mysql.cj.interceptors.QueryInterceptor"};
     }
 }

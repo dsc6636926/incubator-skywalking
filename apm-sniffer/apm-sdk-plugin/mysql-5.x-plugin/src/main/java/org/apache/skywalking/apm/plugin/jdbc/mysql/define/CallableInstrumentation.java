@@ -69,4 +69,8 @@ public class CallableInstrumentation extends ClassInstanceMethodsEnhancePluginDe
     @Override protected ClassMatch enhanceClass() {
         return byMultiClassMatch(ENHANCE_CLASS, "com.mysql.jdbc.cj.CallableStatement");
     }
+
+    @Override protected String[] witnessClasses() {
+        return new String[] {Constants.WITNESS_MYSQL_VERSION_CLASS};
+    }
 }

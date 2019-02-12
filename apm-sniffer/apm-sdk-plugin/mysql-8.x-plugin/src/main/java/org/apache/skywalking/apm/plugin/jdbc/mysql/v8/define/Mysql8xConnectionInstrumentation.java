@@ -17,25 +17,25 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
 
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
 /**
- * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
+ * {@link Mysql8xConnectionInstrumentation } interceptor {@link com.mysql.cj.jdbc.ConnectionImpl} and
+ * com.mysql.jdbc.ConnectionImpl in mysql jdbc driver 5.1 and 5.1+
  *
  * @author zhangxin
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
+public class Mysql8xConnectionInstrumentation extends ConnectionInstrumentation {
+    public static final String ENHANCE_CLASS = "com.mysql.jdbc.ConnectionImpl";
+
+    public static final String CJ_JDBC_ENHANCE_CLASS = "com.mysql.cj.jdbc.ConnectionImpl";
+
     @Override
     protected ClassMatch enhanceClass() {
-        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
-    }
-
-    @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+        return byMultiClassMatch(ENHANCE_CLASS, CJ_JDBC_ENHANCE_CLASS);
     }
 }

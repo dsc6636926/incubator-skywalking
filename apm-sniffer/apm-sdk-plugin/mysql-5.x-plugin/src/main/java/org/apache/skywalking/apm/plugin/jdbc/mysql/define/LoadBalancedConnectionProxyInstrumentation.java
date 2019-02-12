@@ -24,12 +24,14 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassStat
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
-import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
+import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
 public class LoadBalancedConnectionProxyInstrumentation extends ClassStaticMethodsEnhancePluginDefine {
 
     public static final String METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.CreateLoadBalancedConnectionProxyInstanceInterceptor";
     public static final String INTERCEPT_CLASS = "com.mysql.cj.jdbc.ha.LoadBalancedConnectionProxy";
+    public static final String NON_CJ_INTERCEPT_CLASS = "com.mysql.jdbc.LoadBalancedConnectionProxy";
+
 
     @Override protected StaticMethodsInterceptPoint[] getStaticMethodsInterceptPoints() {
         return new StaticMethodsInterceptPoint[] {
@@ -50,6 +52,11 @@ public class LoadBalancedConnectionProxyInstrumentation extends ClassStaticMetho
     }
 
     @Override protected ClassMatch enhanceClass() {
-        return byName(INTERCEPT_CLASS);
+        return byMultiClassMatch(INTERCEPT_CLASS,NON_CJ_INTERCEPT_CLASS);
+    }
+
+
+    @Override protected String[] witnessClasses() {
+        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
     }
 }
