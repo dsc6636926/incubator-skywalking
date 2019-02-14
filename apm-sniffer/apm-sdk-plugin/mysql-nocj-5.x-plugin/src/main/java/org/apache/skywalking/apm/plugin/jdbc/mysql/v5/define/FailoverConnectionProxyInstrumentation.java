@@ -15,8 +15,9 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define;
 
+import com.mysql.jdbc.JDBC4Connection;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.StaticMethodsInterceptPoint;
@@ -28,7 +29,7 @@ import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMa
 
 public class FailoverConnectionProxyInstrumentation extends ClassStaticMethodsEnhancePluginDefine {
 
-    public static final String METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.CreateJdbcConnectionProxyInstanceInterceptor";
+    public static final String METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.v5.CreateJdbcConnectionProxyInstanceInterceptor";
     public static final String NON_CJ_INTERCEPT_CLASS = "com.mysql.jdbc.FailoverConnectionProxy";
 
 
@@ -58,6 +59,6 @@ public class FailoverConnectionProxyInstrumentation extends ClassStaticMethodsEn
 
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_VERSION_CLASS};
     }
 }

@@ -15,6 +15,6 @@
 # limitations under the License.
 
 
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.FailoverConnectionProxyInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.LoadBalancedConnectionProxyInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.ReplicationConnectionProxyInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.FailoverConnectionProxyInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.LoadBalancedConnectionProxyInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.ReplicationConnectionProxyInstrumentation

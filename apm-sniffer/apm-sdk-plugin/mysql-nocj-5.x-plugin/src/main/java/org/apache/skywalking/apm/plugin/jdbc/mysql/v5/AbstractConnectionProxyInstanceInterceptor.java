@@ -15,21 +15,25 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5;
 
 import com.mysql.jdbc.NonRegisteringDriver;
-import com.mysql.jdbc.ReplicationConnection;
+import org.apache.skywalking.apm.agent.core.logging.api.ILog;
+import org.apache.skywalking.apm.agent.core.logging.api.LogManager;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.StaticMethodsAroundInterceptor;
 import org.apache.skywalking.apm.network.trace.component.ComponentsDefine;
-import org.apache.skywalking.apm.plugin.jdbc.mysql.wrapper.ReplicationConnectionWrapper;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.v5.wrapper.JdbcConnectionWrapper;
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Properties;
 
-public class CreateReplicationConnectionProxyInstanceInterceptor implements StaticMethodsAroundInterceptor {
+public abstract class AbstractConnectionProxyInstanceInterceptor implements StaticMethodsAroundInterceptor {
+
+    private static final ILog logger = LogManager.getLogger(AbstractConnectionProxyInstanceInterceptor.class);
+
     @Override public void beforeMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
         MethodInterceptResult result) {
 
@@ -37,17 +41,18 @@ public class CreateReplicationConnectionProxyInstanceInterceptor implements Stat
 
     @Override public Object afterMethod(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,
         Object ret) {
-        List<String> connectionUrls = (List<String>)allArguments[0];
-        String dataBaseName = null;
-        StringBuilder hosts = new StringBuilder();
+        final List<String> connectionUrls = (List<String>)allArguments[0];
+        final Properties properties = (Properties)allArguments[1];
+        final StringBuilder hosts = new StringBuilder();
         for (String url : connectionUrls) {
-            final Properties properties = NonRegisteringDriver.expandHostKeyValues(url);
-            hosts.append(properties.getProperty("host")).append(":").append(properties.getProperty("port")).append(",");
-            dataBaseName = properties.getProperty(NonRegisteringDriver.DBNAME_PROPERTY_KEY);
+            hosts.append(url).append(",");
         }
-        ConnectionInfo connectionInfo = new ConnectionInfo(ComponentsDefine.MYSQL_JDBC_DRIVER, "Mysql", hosts.toString(), dataBaseName);
-        return new ReplicationConnectionWrapper((ReplicationConnection)ret, connectionInfo);
+        ConnectionInfo connectionInfo = new ConnectionInfo(ComponentsDefine.MYSQL_JDBC_DRIVER, "Mysql", hosts.toString(), properties.getProperty(NonRegisteringDriver.DBNAME_PROPERTY_KEY));
+        logger.debug("connectionInfo:{}",connectionInfo);
+        return wrapRtn(ret, connectionInfo);
     }
+
+    abstract JdbcConnectionWrapper wrapRtn(Object ret,ConnectionInfo connectionInfo);
 
     @Override
     public void handleMethodException(Class clazz, Method method, Object[] allArguments, Class<?>[] parameterTypes,

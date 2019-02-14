@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.wrapper;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5.wrapper;
 
 import java.io.InputStream;
 import java.io.Reader;

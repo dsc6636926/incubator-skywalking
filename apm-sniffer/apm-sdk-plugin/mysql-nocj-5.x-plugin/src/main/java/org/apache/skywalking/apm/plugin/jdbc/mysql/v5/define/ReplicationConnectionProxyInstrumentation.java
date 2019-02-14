@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
@@ -26,10 +26,10 @@ import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
-public class LoadBalancedConnectionProxyInstrumentation extends ClassStaticMethodsEnhancePluginDefine {
+public class ReplicationConnectionProxyInstrumentation extends ClassStaticMethodsEnhancePluginDefine {
 
-    public static final String METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.CreateLoadBalancedConnectionProxyInstanceInterceptor";
-    public static final String NON_CJ_INTERCEPT_CLASS = "com.mysql.jdbc.LoadBalancedConnectionProxy";
+    public static final String METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.v5.CreateReplicationConnectionProxyInstanceInterceptor";
+    public static final String NON_CJ_INTERCEPT_CLASS = "com.mysql.jdbc.ReplicationConnectionProxy";
 
 
     @Override protected StaticMethodsInterceptPoint[] getStaticMethodsInterceptPoints() {
@@ -56,6 +56,6 @@ public class LoadBalancedConnectionProxyInstrumentation extends ClassStaticMetho
 
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_VERSION_CLASS};
     }
 }

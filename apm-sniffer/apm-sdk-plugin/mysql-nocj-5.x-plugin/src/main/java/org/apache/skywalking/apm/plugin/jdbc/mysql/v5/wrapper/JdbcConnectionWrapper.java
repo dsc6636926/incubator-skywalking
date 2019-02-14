@@ -15,7 +15,7 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.wrapper;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5.wrapper;
 
 import java.sql.Array;
 import java.sql.Blob;
@@ -47,16 +47,13 @@ public class JdbcConnectionWrapper implements MySQLConnection, EnhancedInstance 
         this.connectionInfo = connectionInfo;
     }
 
-
     private final MySQLConnection delegate;
     private final ConnectionInfo connectionInfo;
     private Object dynamicField;
-
     @Override
     public Object getSkyWalkingDynamicField() {
         return dynamicField;
     }
-
     @Override
     public void setSkyWalkingDynamicField(Object value) {
         this.dynamicField = value;
@@ -3082,57 +3079,46 @@ public class JdbcConnectionWrapper implements MySQLConnection, EnhancedInstance 
     public String getEnabledSSLCipherSuites() {
         return delegate.getEnabledSSLCipherSuites();
     }
-
     @Override
     public void setEnabledSSLCipherSuites(String s) {
         delegate.setEnabledSSLCipherSuites(s);
     }
-
     @Override
     public String getEnabledTLSProtocols() {
         return delegate.getEnabledTLSProtocols();
     }
-
     @Override
     public void setEnabledTLSProtocols(String s) {
         delegate.setEnabledTLSProtocols(s);
     }
-
     @Override
     public boolean getEnableEscapeProcessing() {
         return delegate.getEnableEscapeProcessing();
     }
-
     @Override
     public void setEnableEscapeProcessing(boolean b) {
         delegate.setEnableEscapeProcessing(b);
     }
-
     @Override
     public MySQLConnection getLoadBalanceSafeProxy() {
         return delegate.getLoadBalanceSafeProxy();
     }
-
     @Override
     public MySQLConnection getMultiHostSafeProxy() {
         return delegate.getMultiHostSafeProxy();
     }
-
     @Override
     public MySQLConnection getActiveMySQLConnection() {
         return delegate.getActiveMySQLConnection();
     }
-
     @Override
     public ProfilerEventHandler getProfilerEventHandlerInstance() {
         return delegate.getProfilerEventHandlerInstance();
     }
-
     @Override
     public void setProfilerEventHandlerInstance(ProfilerEventHandler profilerEventHandler) {
         delegate.setProfilerEventHandlerInstance(profilerEventHandler);
     }
-
     @Override
     public boolean isServerTruncatesFracSecs() {
         return delegate.isServerTruncatesFracSecs();

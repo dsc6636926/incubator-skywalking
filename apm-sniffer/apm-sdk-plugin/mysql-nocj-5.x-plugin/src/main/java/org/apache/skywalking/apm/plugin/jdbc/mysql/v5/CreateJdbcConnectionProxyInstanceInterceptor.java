@@ -15,35 +15,18 @@
  *  limitations under the License.
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.wrapper;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5;
 
-import com.mysql.jdbc.LoadBalancedConnection;
+import com.mysql.jdbc.MySQLConnection;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.v5.wrapper.JdbcConnectionWrapper;
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 
-import java.sql.SQLException;
+public class CreateJdbcConnectionProxyInstanceInterceptor extends AbstractConnectionProxyInstanceInterceptor {
 
-public class LoadBalancedConnectionWrapper extends JdbcConnectionWrapper implements LoadBalancedConnection {
 
     @Override
-    public boolean addHost(String s) throws SQLException {
-        return delegate.addHost(s);
+    JdbcConnectionWrapper wrapRtn(Object ret, ConnectionInfo connectionInfo) {
+        return new JdbcConnectionWrapper((MySQLConnection) ret, connectionInfo);
     }
 
-    @Override public void removeHost(String s) throws SQLException {
-        delegate.removeHost(s);
-    }
-
-    @Override public void removeHostWhenNotInUse(String s) throws SQLException {
-        delegate.removeHostWhenNotInUse(s);
-    }
-
-    @Override public void ping(boolean b) throws SQLException {
-        delegate.ping(b);
-    }
-
-    private LoadBalancedConnection delegate;
-
-    public LoadBalancedConnectionWrapper(LoadBalancedConnection delegate, ConnectionInfo info) {
-        super(delegate, info);
-    }
 }
