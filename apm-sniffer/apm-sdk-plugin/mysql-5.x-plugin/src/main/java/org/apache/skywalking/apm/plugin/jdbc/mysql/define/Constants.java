@@ -27,6 +27,6 @@ package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
  * @date: 2019/2/11
  */
 public class Constants {
-    public static final String WITNESS_MYSQL_VERSION_CLASS = "com.mysql.cj.api.MysqlConnection";
-
+    public static final String WITNESS_MYSQL_6X_CLASS = "com.mysql.cj.api.MysqlConnection";
+    public static final String WITNESS_MYSQL_NOCJ_CLASS = "com.mysql.jdbc.ConnectionImpl";
 }

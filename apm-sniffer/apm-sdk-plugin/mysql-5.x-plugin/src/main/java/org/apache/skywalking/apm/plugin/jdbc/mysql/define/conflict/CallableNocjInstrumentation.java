@@ -17,25 +17,31 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict;
 
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.CallableInstrumentation;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
 
-import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
+import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
 /**
- * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
+ * {@link CallableNocjInstrumentation} define that the mysql-2.x plugin intercepts the following methods in the
+ * com.mysql.jdbc.CallableStatement
+ * 1. execute 
+ * 2. executeQuery 
+ * 3. executeUpdate 
  *
  * @author zhangxin
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
-    @Override
-    protected ClassMatch enhanceClass() {
-        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
+public class CallableNocjInstrumentation extends CallableInstrumentation {
+    private static final String ENHANCE_CLASS = "com.mysql.jdbc.CallableStatement";
+
+    @Override protected ClassMatch enhanceClass() {
+        return byName(ENHANCE_CLASS);
     }
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_6X_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_NOCJ_CLASS};
     }
 }

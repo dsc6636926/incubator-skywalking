@@ -17,27 +17,36 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict;
 
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.PreparedStatementInstrumentation;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
 /**
- * {@link Mysql5xConnectionInstrumentation } interceptor {@link com.mysql.cj.jdbc.ConnectionImpl} and
- * com.mysql.jdbc.ConnectionImpl in mysql jdbc driver 5.1 and 5.1+
+ * {@link PreparedStatement6xInstrumentation} define that the mysql-2.x plugin intercepts the following methods in the
+ * com.mysql.jdbc.JDBC42PreparedStatement, com.mysql.jdbc.PreparedStatement and 
+ * com.mysql.cj.jdbc.PreparedStatement class:
+ * 1. execute 
+ * 2. executeQuery 
+ * 3. executeUpdate 
+ * 4. executeLargeUpdate 
+ * 5. addBatch 
  *
  * @author zhangxin
  */
-public class Mysql5xConnectionInstrumentation extends ConnectionInstrumentation {
+public class PreparedStatement6xInstrumentation extends PreparedStatementInstrumentation {
 
-    public static final String CJ_JDBC_ENHANCE_CLASS = "com.mysql.cj.jdbc.ConnectionImpl";
+    public static final String MYSQL6_PREPARED_STATEMENT_CLASS_NAME = "com.mysql.cj.jdbc.PreparedStatement";
 
     @Override protected ClassMatch enhanceClass() {
-        return byName(CJ_JDBC_ENHANCE_CLASS);
+        return byName(MYSQL6_PREPARED_STATEMENT_CLASS_NAME);
     }
 
+
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_6X_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_NOCJ_CLASS};
     }
 }

@@ -17,9 +17,18 @@
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.DriverInstrumentation
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.Mysql5xConnectionInstrumentation
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.Mysql50ConnectionInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.CallableInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.PreparedStatementInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.StatementInstrumentation
+# mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.CallableInstrumentation
+# mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.PreparedStatementInstrumentation
+# mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.StatementInstrumentation
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.FailoverConnectionProxyInstrumentation
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.LoadBalancedConnectionProxyInstrumentation
 mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.ReplicationConnectionProxyInstrumentation
+
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.DriverNocjInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.Mysql5xNocjConnectionInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.Callable6xInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.CallableNocjInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.PreparedStatement6xInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.PreparedStatementNocjInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.Statement6xInstrumentation
+mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict.StatementNocjInstrumentation

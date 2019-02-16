@@ -121,7 +121,5 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
     @Override protected abstract ClassMatch enhanceClass();
 
 
-    @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
-    }
+
 }

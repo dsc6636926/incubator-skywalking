@@ -59,6 +59,6 @@ public class FailoverConnectionProxyInstrumentation extends ClassStaticMethodsEn
 
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
+        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_6X_CLASS};
     }
 }

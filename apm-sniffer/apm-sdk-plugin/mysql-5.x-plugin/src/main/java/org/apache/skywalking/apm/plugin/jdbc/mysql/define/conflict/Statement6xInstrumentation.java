@@ -17,25 +17,37 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict;
 
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.StatementInstrumentation;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
 /**
- * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
+ * {@link Statement6xInstrumentation} intercepts the following methods in the
+ * com.mysql.jdbc.StatementImpl and com.mysql.cj.jdbc.StatementImpl class.
+ * 1. execute
+ * 2. executeQuery
+ * 3. executeUpdate
+ * 4. executeLargeUpdate
+ * 5. addBatch
+ * 6. executeBatchInternal
+ * 7. executeUpdateInternal
+ * 8. executeQuery
+ * 9. executeBatch
  *
  * @author zhangxin
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
-    @Override
-    protected ClassMatch enhanceClass() {
-        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
+public class Statement6xInstrumentation extends StatementInstrumentation {
+    private static final String STATEMENT_CLASS_NAME = "com.mysql.cj.jdbc.StatementImpl";
+
+    @Override protected ClassMatch enhanceClass() {
+        return byMultiClassMatch(STATEMENT_CLASS_NAME);
     }
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_6X_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_6X_CLASS};
     }
 }

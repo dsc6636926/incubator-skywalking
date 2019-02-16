@@ -17,25 +17,26 @@
  */
 
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.define.conflict;
 
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
+import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
 /**
- * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
+ * {@link DriverNocjInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
  *
  * @author zhangxin
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
+public class DriverNocjInstrumentation extends AbstractDriverInstrumentation {
     @Override
     protected ClassMatch enhanceClass() {
-        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
+        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.jdbc.NonRegisteringDriver");
     }
 
     @Override protected String[] witnessClasses() {
-        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_6X_CLASS};
+        return new String[] {Constants.WITNESS_MYSQL_NOCJ_CLASS};
     }
 }
