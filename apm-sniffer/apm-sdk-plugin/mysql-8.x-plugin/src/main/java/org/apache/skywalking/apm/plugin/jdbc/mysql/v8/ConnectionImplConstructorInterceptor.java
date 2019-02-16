@@ -16,27 +16,27 @@
  *
  */
 
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v8;
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
-
-import org.apache.skywalking.apm.plugin.jdbc.define.AbstractDriverInstrumentation;
-import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
-
-import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
+import com.mysql.cj.conf.HostInfo;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceConstructorInterceptor;
+import org.apache.skywalking.apm.plugin.jdbc.connectionurl.parser.URLParser;
 
 /**
- * {@link DriverInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
  *
- * @author zhangxin
+ * @version V1.0
+ * @Title: ConnectionImplConstructorInterceptor
+ * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.v8
+ * @Description:
+ * @author: dingshaocheng
+ * @date: 2019/2/16
  */
-public class DriverInstrumentation extends AbstractDriverInstrumentation {
-    @Override
-    protected ClassMatch enhanceClass() {
-        return byMultiClassMatch("com.mysql.jdbc.Driver", "com.mysql.cj.jdbc.Driver","com.mysql.jdbc.NonRegisteringDriver");
-    }
+public class ConnectionImplConstructorInterceptor implements InstanceConstructorInterceptor {
 
     @Override
-    protected String[] witnessClasses() {
-        return new String[] {"com.mysql.cj.interceptors.QueryInterceptor"};
+    public void onConstruct(EnhancedInstance objInst, Object[] allArguments) {
+
+        objInst.setSkyWalkingDynamicField(URLParser.parser(((HostInfo)allArguments[0]).getDatabaseUrl()));
     }
 }

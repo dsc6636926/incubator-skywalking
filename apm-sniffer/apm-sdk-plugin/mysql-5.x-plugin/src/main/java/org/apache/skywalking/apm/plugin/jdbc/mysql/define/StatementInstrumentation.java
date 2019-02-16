@@ -82,8 +82,7 @@ public class StatementInstrumentation extends ClassInstanceMethodsEnhancePluginD
         return byMultiClassMatch(STATEMENT_CLASS_NAME, MYSQL6_STATEMENT_CLASS_NAME);
     }
 
-
     @Override protected String[] witnessClasses() {
-        return new String[] {"com.mysql.jdbc.ConnectionImpl"};
+        return new String[] {org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants.WITNESS_MYSQL_VERSION_CLASS};
     }
 }

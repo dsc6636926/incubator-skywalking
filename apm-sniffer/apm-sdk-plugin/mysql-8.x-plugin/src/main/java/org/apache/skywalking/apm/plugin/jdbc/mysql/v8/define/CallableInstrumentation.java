@@ -21,13 +21,13 @@ package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.ConstructorInterceptPoint;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassInstanceMethodsEnhancePluginDefine;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
-import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
+import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
 /**
  * {@link CallableInstrumentation} define that the mysql-2.x plugin intercepts the following methods in the 
@@ -39,7 +39,7 @@ import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMa
  * @author zhangxin
  */
 public class CallableInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
-    private static final String ENHANCE_CLASS = "com.mysql.jdbc.CallableStatement";
+    private static final String ENHANCE_CLASS = "com.mysql.cj.jdbc.CallableStatement";
     private static final String SERVICE_METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.PreparedStatementExecuteMethodsInterceptor";
 
     @Override protected ConstructorInterceptPoint[] getConstructorsInterceptPoints() {
@@ -67,7 +67,7 @@ public class CallableInstrumentation extends ClassInstanceMethodsEnhancePluginDe
     }
 
     @Override protected ClassMatch enhanceClass() {
-        return byMultiClassMatch(ENHANCE_CLASS, "com.mysql.jdbc.cj.CallableStatement");
+        return byName(ENHANCE_CLASS);
     }
 
     @Override

@@ -21,14 +21,15 @@ package org.apache.skywalking.apm.plugin.jdbc.mysql.v8.define;
 
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.matcher.ElementMatcher;
-import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
-import org.apache.skywalking.apm.plugin.jdbc.define.Constants;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.ConstructorInterceptPoint;
+import org.apache.skywalking.apm.agent.core.plugin.interceptor.InstanceMethodsInterceptPoint;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.ClassInstanceMethodsEnhancePluginDefine;
 import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
+import org.apache.skywalking.apm.plugin.jdbc.define.Constants;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
+import static org.apache.skywalking.apm.agent.core.plugin.bytebuddy.ArgumentTypeNameMatch.takesArgumentWithType;
 
 /**
  * {@link ConnectionInstrumentation} intercepts the following methods that the class which extend
@@ -44,7 +45,16 @@ import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
 public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
     @Override protected ConstructorInterceptPoint[] getConstructorsInterceptPoints() {
-        return new ConstructorInterceptPoint[0];
+        return new ConstructorInterceptPoint[] {
+            new ConstructorInterceptPoint() {
+                @Override public ElementMatcher<MethodDescription> getConstructorMatcher() {
+                    return takesArgumentWithType(0,"com.mysql.cj.conf.HostInfo");
+                }
+                @Override public String getConstructorInterceptor() {
+                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.ConnectionImplConstructorInterceptor";
+                }
+            }
+        };
     }
 
     @Override protected InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
@@ -109,7 +119,6 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
                 @Override public String getMethodsInterceptor() {
                     return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.SetCatalogInterceptor";
                 }
-
                 @Override public boolean isOverrideArgs() {
                     return false;
                 }

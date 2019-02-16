@@ -16,17 +16,17 @@
  *
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.define;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v8;
 
 /**
  *
- * @Title: Constants
- * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.define
+ * @version V1.0
+ * @Title: ConnectionImplConstructorInterceptorTest
+ * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.v8
  * @Description:
  * @author: dingshaocheng
- * @date: 2019/2/11
+ * @date: 2019/2/16
  */
-public class Constants {
-    public static final String WITNESS_MYSQL_VERSION_CLASS = "com.mysql.cj.api.MysqlConnection";
+public class ConnectionImplConstructorInterceptorTest {
 
 }
