@@ -18,14 +18,6 @@
 
 package org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define;
 
-/**
- *
- * @Title: Constants
- * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.define
- * @Description:
- * @author: dingshaocheng
- * @date: 2019/2/11
- */
 public class Constants {
     public static final String WITNESS_MYSQL_VERSION_CLASS = "com.mysql.jdbc.ConnectionImpl";
 }
