@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.FailoverConnectionProxyInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.LoadBalancedConnectionProxyInstrumentation
-mysql-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.ReplicationConnectionProxyInstrumentation
+mysql-nocj-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.ConnectionInstrumentation
+mysql-nocj-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.FailoverConnectionProxyInstrumentation
+mysql-nocj-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.LoadBalancedConnectionProxyInstrumentation
+mysql-nocj-5.x=org.apache.skywalking.apm.plugin.jdbc.mysql.v5.define.ReplicationConnectionProxyInstrumentation
