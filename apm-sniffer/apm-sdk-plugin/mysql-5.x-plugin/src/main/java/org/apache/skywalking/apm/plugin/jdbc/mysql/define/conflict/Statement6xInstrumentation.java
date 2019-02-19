@@ -25,21 +25,6 @@ import org.apache.skywalking.apm.plugin.jdbc.mysql.define.StatementInstrumentati
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
-/**
- * {@link Statement6xInstrumentation} intercepts the following methods in the
- * com.mysql.jdbc.StatementImpl and com.mysql.cj.jdbc.StatementImpl class.
- * 1. execute
- * 2. executeQuery
- * 3. executeUpdate
- * 4. executeLargeUpdate
- * 5. addBatch
- * 6. executeBatchInternal
- * 7. executeUpdateInternal
- * 8. executeQuery
- * 9. executeBatch
- *
- * @author zhangxin
- */
 public class Statement6xInstrumentation extends StatementInstrumentation {
     private static final String STATEMENT_CLASS_NAME = "com.mysql.cj.jdbc.StatementImpl";
 

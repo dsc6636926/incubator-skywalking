@@ -25,11 +25,6 @@ import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.MultiClassNameMatch.byMultiClassMatch;
 
-/**
- * {@link DriverNocjInstrumentation} presents that skywalking intercepts {@link com.mysql.jdbc.Driver}.
- *
- * @author zhangxin
- */
 public class DriverNocjInstrumentation extends AbstractDriverInstrumentation {
     @Override
     protected ClassMatch enhanceClass() {

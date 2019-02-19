@@ -16,46 +16,50 @@
  *
  */
 
-package org.apache.skywalking.apm.plugin.jdbc.mysql.v8;
 
-import com.mysql.cj.conf.ConnectionUrlParser;
+package org.apache.skywalking.apm.plugin.jdbc.mysql.v5;
+
+import com.mysql.jdbc.JDBC4Connection;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.junit.Assert;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.internal.verification.VerificationModeFactory.times;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  *
- * @Title: ConnectionImplConstructorInterceptorTest
- * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.v8
+ * @Title: CreateJdbcConnectionProxyInstanceInterceptorTest
+ * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.v5
  * @Description:
  * @author: dingshaocheng
- * @date: 2019/2/16
+ * @date: 2019/2/18
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ConnectionImplConstructorInterceptorTest {
-    private ConnectionImplConstructorInterceptor interceptor;
+public class CreateJdbcConnectionProxyInstanceInterceptorTest {
+
+
+    private CreateJdbcConnectionProxyInstanceInterceptor interceptor;
 
     @Mock
-    private EnhancedInstance objectInstance;
+    private JDBC4Connection ret;
 
 
     @Before
-    public void setUp() {
-        interceptor = new ConnectionImplConstructorInterceptor();
+    public void setUp() throws Exception {
+        interceptor = new CreateJdbcConnectionProxyInstanceInterceptor();
     }
 
     @Test
-    public void testResultIsEnhanceInstance() throws Exception {
-        final ConnectionUrlParser connectionUrlParser = ConnectionUrlParser.parseConnectionString("jdbc:mysql:replication://localhost:3360,localhost:3360,localhost:3360/test?useUnicode=true&characterEncoding=utf8&useSSL=false&roundRobinLoadBalance=true");
-
-        interceptor.onConstruct(objectInstance,connectionUrlParser.getHosts().toArray());
-        verify(objectInstance,times(1)).setSkyWalkingDynamicField(Matchers.any());
+    public void testResultIsEnhanceInstance() {
+        final List<String> hosts = new ArrayList<String>();
+        hosts.add("jdbc:mysql://localhost:3306/test?useUnicode=true&characterEncoding=utf8");
+        Object result = interceptor.afterMethod(null,null,new Object[]{hosts,new Properties()},null,ret);
+        Assert.assertTrue("wrap fail",result instanceof EnhancedInstance);
     }
 }

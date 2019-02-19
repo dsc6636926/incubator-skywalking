@@ -25,12 +25,6 @@ import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
-/**
- * {@link Mysql5xNocjConnectionInstrumentation } interceptor {@link com.mysql.cj.jdbc.ConnectionImpl} and
- * com.mysql.jdbc.ConnectionImpl in mysql jdbc driver 5.1 and 5.1+
- *
- * @author zhangxin
- */
 public class Mysql5xNocjConnectionInstrumentation extends ConnectionInstrumentation {
     public static final String ENHANCE_CLASS = "com.mysql.jdbc.ConnectionImpl";
 

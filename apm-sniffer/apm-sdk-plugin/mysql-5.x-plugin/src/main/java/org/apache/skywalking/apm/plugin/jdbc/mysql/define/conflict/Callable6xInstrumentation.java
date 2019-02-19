@@ -25,15 +25,6 @@ import org.apache.skywalking.apm.plugin.jdbc.mysql.define.Constants;
 
 import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
-/**
- * {@link Callable6xInstrumentation} define that the mysql-2.x plugin intercepts the following methods in the
- * com.mysql.jdbc.CallableStatement
- * 1. execute 
- * 2. executeQuery 
- * 3. executeUpdate 
- *
- * @author zhangxin
- */
 public class Callable6xInstrumentation extends CallableInstrumentation {
     private static final String ENHANCE_CLASS = "com.mysql.jdbc.cj.CallableStatement";
 
