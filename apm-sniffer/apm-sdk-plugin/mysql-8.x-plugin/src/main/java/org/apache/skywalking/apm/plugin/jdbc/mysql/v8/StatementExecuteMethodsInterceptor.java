@@ -29,11 +29,7 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInt
 import org.apache.skywalking.apm.plugin.jdbc.define.StatementEnhanceInfos;
 import org.apache.skywalking.apm.plugin.jdbc.trace.ConnectionInfo;
 
-/**
- * {@link StatementExecuteMethodsInterceptor} create the exit span when the client call the interceptor methods.
- *
- * @author zhangxin
- */
+
 public class StatementExecuteMethodsInterceptor implements InstanceMethodsAroundInterceptor {
     @Override
     public final void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments,

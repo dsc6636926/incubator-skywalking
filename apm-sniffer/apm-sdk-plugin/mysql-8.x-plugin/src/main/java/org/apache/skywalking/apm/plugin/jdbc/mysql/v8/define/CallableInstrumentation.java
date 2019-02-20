@@ -36,7 +36,6 @@ import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName
  * 2. executeQuery 
  * 3. executeUpdate 
  *
- * @author zhangxin
  */
 public class CallableInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
     private static final String ENHANCE_CLASS = "com.mysql.cj.jdbc.CallableStatement";

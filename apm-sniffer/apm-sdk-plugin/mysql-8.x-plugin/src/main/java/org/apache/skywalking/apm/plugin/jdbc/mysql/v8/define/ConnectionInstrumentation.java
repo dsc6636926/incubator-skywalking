@@ -40,7 +40,6 @@ import static org.apache.skywalking.apm.agent.core.plugin.bytebuddy.ArgumentType
  * 3. Enhance <code>createStatement</code> by <code>org.apache.skywalking.apm.plugin.jdbc.define.JDBCStatementInterceptor</code>
  * 4. Enhance <code>commit, rollback, close, releaseSavepoint</code> by <code>org.apache.skywalking.apm.plugin.jdbc.define.ConnectionServiceMethodInterceptor</code>
  *
- * @author zhangxin
  */
 public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 

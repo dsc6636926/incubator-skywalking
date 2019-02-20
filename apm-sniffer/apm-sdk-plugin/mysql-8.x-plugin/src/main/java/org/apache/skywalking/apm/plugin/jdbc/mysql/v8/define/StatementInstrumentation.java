@@ -29,21 +29,6 @@ import org.apache.skywalking.apm.agent.core.plugin.match.ClassMatch;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
-/**
- * {@link StatementInstrumentation} intercepts the following methods in the
- * com.mysql.jdbc.StatementImpl and com.mysql.cj.jdbc.StatementImpl class.
- * 1. execute
- * 2. executeQuery
- * 3. executeUpdate
- * 4. executeLargeUpdate
- * 5. addBatch
- * 6. executeBatchInternal
- * 7. executeUpdateInternal
- * 8. executeQuery
- * 9. executeBatch
- *
- * @author zhangxin
- */
 public class StatementInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
     private static final String SERVICE_METHOD_INTERCEPTOR = "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.StatementExecuteMethodsInterceptor";
     public static final String MYSQL8_STATEMENT_CLASS_NAME = "com.mysql.cj.jdbc.StatementImpl";
