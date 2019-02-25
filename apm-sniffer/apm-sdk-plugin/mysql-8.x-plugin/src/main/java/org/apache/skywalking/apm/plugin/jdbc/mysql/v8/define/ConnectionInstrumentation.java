@@ -29,7 +29,7 @@ import org.apache.skywalking.apm.plugin.jdbc.define.Constants;
 
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.matcher.ElementMatchers.takesArguments;
-import static org.apache.skywalking.apm.agent.core.plugin.bytebuddy.ArgumentTypeNameMatch.takesArgumentWithType;
+import static org.apache.skywalking.apm.agent.core.plugin.match.NameMatch.byName;
 
 /**
  * {@link ConnectionInstrumentation} intercepts the following methods that the class which extend
@@ -41,19 +41,10 @@ import static org.apache.skywalking.apm.agent.core.plugin.bytebuddy.ArgumentType
  * 4. Enhance <code>commit, rollback, close, releaseSavepoint</code> by <code>org.apache.skywalking.apm.plugin.jdbc.define.ConnectionServiceMethodInterceptor</code>
  *
  */
-public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
+public class ConnectionInstrumentation extends ClassInstanceMethodsEnhancePluginDefine {
 
     @Override protected ConstructorInterceptPoint[] getConstructorsInterceptPoints() {
-        return new ConstructorInterceptPoint[] {
-            new ConstructorInterceptPoint() {
-                @Override public ElementMatcher<MethodDescription> getConstructorMatcher() {
-                    return takesArgumentWithType(0,"com.mysql.cj.conf.HostInfo");
-                }
-                @Override public String getConstructorInterceptor() {
-                    return "org.apache.skywalking.apm.plugin.jdbc.mysql.v8.ConnectionImplConstructorInterceptor";
-                }
-            }
-        };
+        return new ConstructorInterceptPoint[0];
     }
 
     @Override protected InstanceMethodsInterceptPoint[] getInstanceMethodsInterceptPoints() {
@@ -131,5 +122,7 @@ public abstract class ConnectionInstrumentation extends ClassInstanceMethodsEnha
         return new String[] {"com.mysql.cj.interceptors.QueryInterceptor"};
     }
 
-    @Override protected abstract ClassMatch enhanceClass();
+    @Override protected ClassMatch enhanceClass() {
+        return byName("com.mysql.cj.jdbc.ConnectionImpl");
+    };
 }

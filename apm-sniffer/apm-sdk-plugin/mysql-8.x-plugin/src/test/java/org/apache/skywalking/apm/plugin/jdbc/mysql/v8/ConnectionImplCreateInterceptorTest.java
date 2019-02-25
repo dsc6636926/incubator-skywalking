@@ -32,15 +32,15 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 /**
  *
- * @Title: ConnectionImplConstructorInterceptorTest
+ * @Title: ConnectionImplCreateInterceptorTest
  * @Package org.apache.skywalking.apm.plugin.jdbc.mysql.v8
  * @Description:
  * @author: dingshaocheng
  * @date: 2019/2/16
  */
 @RunWith(MockitoJUnitRunner.class)
-public class ConnectionImplConstructorInterceptorTest {
-    private ConnectionImplConstructorInterceptor interceptor;
+public class ConnectionImplCreateInterceptorTest {
+    private ConnectionCreateInterceptor interceptor;
 
     @Mock
     private EnhancedInstance objectInstance;
@@ -48,14 +48,14 @@ public class ConnectionImplConstructorInterceptorTest {
 
     @Before
     public void setUp() {
-        interceptor = new ConnectionImplConstructorInterceptor();
+        interceptor = new ConnectionCreateInterceptor();
     }
 
     @Test
-    public void testResultIsEnhanceInstance() throws Exception {
+    public void testResultIsEnhanceInstance() throws Throwable {
         final ConnectionUrlParser connectionUrlParser = ConnectionUrlParser.parseConnectionString("jdbc:mysql:replication://localhost:3360,localhost:3360,localhost:3360/test?useUnicode=true&characterEncoding=utf8&useSSL=false&roundRobinLoadBalance=true");
 
-        interceptor.onConstruct(objectInstance,connectionUrlParser.getHosts().toArray());
+        interceptor.afterMethod(null,null,connectionUrlParser.getHosts().toArray(),null,objectInstance);
         verify(objectInstance,times(1)).setSkyWalkingDynamicField(Matchers.any());
     }
 }
