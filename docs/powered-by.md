@@ -5,6 +5,7 @@ or providing commercial products including Apache SkyWalking.
 
 1. 300.cn 中企动力科技股份有限公司 http://www.300.cn/
 1. 4399.com 四三九九网络股份有限公司. http://www.4399.com/
+1. 51mydao.com 买道传感科技（上海）有限公司 https://www.51mydao.com/
 1. 5i5j. 上海我爱我家房地产经纪有限公司 https://sh.5i5j.com/about/
 1. Alibaba Cloud, 阿里云, http://aliyun.com 
 1. Anxin Insurance. 安心财产保险有限责任公司 https://www.95303.com
@@ -48,16 +49,20 @@ or providing commercial products including Apache SkyWalking.
 1. Mxnavi. 沈阳美行科技有限公司 http://www.mxnavi.com/
 1. Moji 墨叽（深圳）科技有限公司 https://www.mojivip.com
 1. Mypharma.com 北京融贯电子商务有限公司 https://www.mypharma.com
-1. Primeton.com 普元信息技术股份有限公司 http://www.primeton.com . 
+1. Osacart in WeChat app 广州美克曼尼电子商务有限公司
+1. Primeton.com 普元信息技术股份有限公司 http://www.primeton.com 
 1. qiniu.com 七牛云 http://qiniu.com 
 1. Qingyidai.com 轻易贷 https://www.qingyidai.com/
 1. Qsdjf.com 浙江钱宝网络科技有限公司 https://www.qsdjf.com/index.html
 1. Qk365.com 上海青客电子商务有限公司 https://www.qk365.com
 1. Rongjinbao. 深圳融金宝互联网金融服务有限公司. http://www.rjb777.com
 1. Shouqi Limousine & chauffeur Group 首约科技(北京)有限公司. https://www.01zhuanche.com/
+1. Source++ https://sourceplusplus.com
 1. StartDT 奇点云 https://www.startdt.com/
 1. Successchannel 苏州渠成易销网络科技有限公司. http://www.successchannel.com
+1. Tetrate.io https://www.tetrate.io/
 1. Today36524.com Today便利店
+1. Tools information technology co. LTD 杭州图尔兹信息技术有限公司 http://bintools.cn/
 1. Tsfinance.com 重庆宜迅联供应链科技有限公司 https://www.tsfinance.com.cn/
 1. Tuya. 涂鸦智能. https://www.tuya.com
 1. VBill Payment Co., LTD. 随行付. https://www.vbill.cn/
@@ -86,9 +91,18 @@ Deploy SkyWalking in production enviroments.
 
 Support 60+ Instances, Over 300k Calls Per Minute, Over 50k Spans Per Second
 
-## Qiniu Cloud
-Provide a customized version SkyWalking agent. It could provide distributed tracing and integrated in its intelligence log management platform.
+## Oscart
+Use multiple language agents from SkyWalking and its ecosystem, including SkyWalking Javaagent and [SkyAPM nodejs agent](https://github.com/SkyAPM/SkyAPM-nodejs). SkyWalking OAP platform acts as backend and visualization.
 
 ## Primeton
 Integrated in Primeton EOS PLATFORM 8, which is a commercial micro-service platform.
 
+## Tetrate
+Tetrate provides enterprise level service mesh. SkyWalking acts as the core observability platform for hybrid
+enterprise service mesh environment.
+
+## Qiniu Cloud
+Provide a customized version SkyWalking agent. It could provide distributed tracing and integrated in its intelligence log management platform.
+
+## Source++
+An open-source observant programming assistant which aims to bridge APM tools with the developer's IDE to enable tighter feedback loops. Source++ uses SkyWalking as the defacto APM for JVM-based applications.

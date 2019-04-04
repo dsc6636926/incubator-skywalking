@@ -58,6 +58,8 @@ storage:
   elasticsearch:
     nameSpace: ${SW_NAMESPACE:""}
     clusterNodes: ${SW_STORAGE_ES_CLUSTER_NODES:localhost:9200}
+    user: ${SW_ES_USER:""}
+    password: ${SW_ES_PASSWORD:""}
     indexShardsNumber: ${SW_STORAGE_ES_INDEX_SHARDS_NUMBER:2}
     indexReplicasNumber: ${SW_STORAGE_ES_INDEX_REPLICAS_NUMBER:0}
     # Batch process setting, refer to https://www.elastic.co/guide/en/elasticsearch/client/java-api/5.5/java-docs-bulk-processor.html
@@ -84,6 +86,8 @@ receiver-trace:
     slowDBAccessThreshold: ${SW_SLOW_DB_THRESHOLD:default:200,mongodb:100} # The slow database access thresholds. Unit ms.
 receiver-jvm:
   default:
+receiver-clr:
+  default:
 service-mesh:
   default:
     bufferPath: ${SW_SERVICE_MESH_BUFFER_PATH:../mesh-buffer/}  # Path to trace buffer files, suggest to use absolute path
@@ -99,6 +103,10 @@ envoy-metric:
 #    host: ${SW_RECEIVER_ZIPKIN_HOST:0.0.0.0}
 #    port: ${SW_RECEIVER_ZIPKIN_PORT:9411}
 #    contextPath: ${SW_RECEIVER_ZIPKIN_CONTEXT_PATH:/}
+#receiver_jaeger:
+#  default:
+#    gRPCHost: ${SW_RECEIVER_JAEGER_HOST:0.0.0.0}
+#    gRPCPort: ${SW_RECEIVER_JAEGER_PORT:14250}
 query:
   graphql:
     path: ${SW_QUERY_GRAPHQL_PATH:/graphql}
@@ -106,3 +114,7 @@ alarm:
   default:
 telemetry:
   prometheus:
+#exporter:
+#  grpc:
+#    targetHost: 127.0.0.1
+#    targetPort: 9870

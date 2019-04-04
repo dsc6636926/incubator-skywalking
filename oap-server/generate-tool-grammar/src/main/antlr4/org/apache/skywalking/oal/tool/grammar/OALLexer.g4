@@ -26,6 +26,7 @@ lexer grammar OALLexer;
 
 FROM: 'from';
 FILTER: 'filter';
+DISABLE: 'disable';
 SRC_ALL: 'All';
 SRC_SERVICE: 'Service';
 SRC_SERVICE_INSTANCE: 'ServiceInstance';
@@ -43,13 +44,24 @@ SRC_SERVICE_INSTANCE_CLR_GC: 'ServiceInstanceCLRGC';
 SRC_SERVICE_INSTANCE_CLR_THREAD: 'ServiceInstanceCLRThread';
 SRC_ENVOY_INSTANCE_METRIC: 'EnvoyInstanceMetric';
 
+//hard code sources, only used when need to be deactived.
+SRC_SEGMENT: 'segment';
+SRC_TOP_N_DB_STATEMENT: 'top_n_database_statement';
+SRC_ENDPOINT_RELATION_SERVER_SIDE: 'endpoint_relation_server_side';
+SRC_SERVICE_RELATION_SERVER_SIDE: 'service_relation_server_side';
+SRC_SERVICE_RELATION_CLIENT_SIDE: 'service_relation_client_side';
+SRC_ALARM_RECORD: 'alarm_record';
+
+SRC_ZIPKIN_SPAN: 'zipkin_span';
+SRC_JAEGER_SPAN: 'jaeger_span';
+
 // Literals
 
 BOOL_LITERAL:       'true'
             |       'false'
             ;
 
-INT_LITERAL :   Digits+;
+NUMBER_LITERAL :   Digits+;
 
 CHAR_LITERAL:       '\'' (~['\\\r\n] | EscapeSequence) '\'';
 
@@ -112,3 +124,7 @@ SEMI:                                ';';
 EQUAL:                               '=';
 DUALEQUALS:                          '==';
 ALL:                                 '*';
+GREATER:                             '>';
+LESS:                                '<';
+GREATER_EQUAL:                       '>=';
+LESS_EQUAL:                          '<=';

@@ -39,6 +39,7 @@ including
 1. Java, .NET Core, NodeJS and PHP auto-instrument agents in SkyWalking format
 1. Istio telemetry format
 1. Zipkin v1/v2 format
+1. Jaeger gRPC format.
 1. Envoy metrics format (the metric entries itself is prometheus client [metric family](https://github.com/prometheus/client_model/blob/fd36f4220a901265f90734c3183c5f0c91daa0b8/metrics.proto#L77))
 
 
@@ -55,7 +56,7 @@ This project adheres to the Contributor Covenant [code of conduct](CODE_OF_CONDU
 Please follow the [REPORTING GUIDELINES](CODE_OF_CONDUCT.md#reporting-guidelines) to report unacceptable behavior.
 
 # Live Demo
-- Host in Beijing. [goto](http://106.75.237.45:8080/)
+- Host in Beijing. Go to [demo](http://106.75.237.45:8080/).
   - Username: admin
   - Password: admin
 
@@ -82,14 +83,14 @@ Follow this [document](docs/en/guides/How-to-build.md).
 # Contact Us
 * Submit an [issue](https://github.com/apache/incubator-skywalking/issues)
 * Mail list: **dev@skywalking.apache.org**. Mail to `dev-subscribe@skywalking.apache.org`, follow the reply to subscribe the mail list.
-* [Gitter](https://gitter.im/openskywalking/Lobby)
+* [Slack](https://skywalking.slack.com)
 * QQ Group: 392443393
 
 # Who Uses SkyWalking?
 A wide variety of companies and organizations use SkyWalking for research, production and commercial product.
 Here is the **User Wall** of SkyWalking.
 
-<img src="http://skywalking.apache.org/assets/users-20190222.png"/>
+<img src="http://skywalking.apache.org/assets/users-20190402.png"/>
 
 Users are encouraged to add themselves to the [PoweredBy](docs/powered-by.md) page.
 
