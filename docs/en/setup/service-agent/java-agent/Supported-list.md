@@ -24,6 +24,7 @@
   * Oracle Driver (Optional¹)
   * H2 Driver 1.3.x -> 1.4.x
   * [Sharding-JDBC](https://github.com/shardingjdbc/sharding-jdbc) 1.5.x
+  * [ShardingSphere](https://github.com/apache/incubator-shardingsphere) 3.0.0
   * PostgreSQL Driver 8.x, 9.x, 42.x
 * RPC Frameworks
   * [Dubbo](https://github.com/alibaba/dubbo) 2.5.4 -> 2.6.0
@@ -31,7 +32,7 @@
   * [Apache Dubbo](https://github.com/apache/incubator-dubbo) 2.7.0
   * [Motan](https://github.com/weibocom/motan) 0.2.x -> 1.1.0
   * [gRPC](https://github.com/grpc/grpc-java) 1.x
-  * [Apache ServiceComb Java Chassis](https://github.com/apache/incubator-servicecomb-java-chassis) 0.1 -> 0.5,1.0.x
+  * [Apache ServiceComb Java Chassis](https://github.com/apache/servicecomb-java-chassis) 0.1 -> 0.5,1.0.x
   * [SOFARPC](https://github.com/alipay/sofa-rpc) 5.4.0
 * MQ
   * [RocketMQ](https://github.com/apache/rocketmq) 4.x
@@ -63,6 +64,9 @@
 * [Canal: Alibaba mysql database binlog incremental subscription & consumer components](https://github.com/alibaba/canal) 1.0.25 -> 1.1.2
 * JSON
   * [GSON](https://github.com/google/gson) 2.8.x (Optional²)
+* Vert.x Ecosystem
+  * Vert.x Eventbus 3.2+
+  * Vert.x Web 3.x
 
 ¹Due to license incompatibilities/restrictions these plugins are hosted and released in 3rd part repository, 
  go to [SkyAPM java plugin extension repository](https://github.com/SkyAPM/java-plugin-extensions) to get these.
