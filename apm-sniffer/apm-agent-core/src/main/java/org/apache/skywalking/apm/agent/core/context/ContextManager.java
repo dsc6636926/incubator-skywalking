@@ -157,6 +157,10 @@ public class ContextManager implements BootService {
         return get().awaitFinishAsync();
     }
 
+    /**
+     * If not sure has the active span, use this method, will be cause NPE when has no active span,
+     * use ContextManager::isActive method to determine whether there has the active span.
+     */
     public static AbstractSpan activeSpan() {
         return get().activeSpan();
     }
@@ -168,6 +172,7 @@ public class ContextManager implements BootService {
     public static void stopSpan(AbstractSpan span) {
         if (get().stopSpan(span)) {
             CONTEXT.remove();
+            RUNTIME_CONTEXT.remove();
         }
     }
 

@@ -160,6 +160,7 @@ public class CoreModuleProvider extends ModuleProvider {
 
             annotationScan.scan(() -> {
             });
+            streamDataMapping.init();
         } catch (IOException | IllegalAccessException | InstantiationException e) {
             throw new ModuleStartException(e.getMessage(), e);
         }
@@ -178,7 +179,7 @@ public class CoreModuleProvider extends ModuleProvider {
             this.getManager().find(ClusterModule.NAME).provider().getService(ClusterRegister.class).registerRemote(gRPCServerInstance);
         }
 
-        PersistenceTimer.INSTANCE.start(getManager());
+        PersistenceTimer.INSTANCE.start(getManager(), moduleConfig);
 
         if (moduleConfig.isEnableDataKeeperExecutor()) {
             DataTTLKeeperTimer.INSTANCE.start(getManager());

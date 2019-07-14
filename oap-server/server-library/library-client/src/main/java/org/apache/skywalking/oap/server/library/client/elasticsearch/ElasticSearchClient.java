@@ -21,6 +21,7 @@ package org.apache.skywalking.oap.server.library.client.elasticsearch;
 import com.google.gson.*;
 import java.io.*;
 import java.util.*;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.*;
 import org.apache.http.auth.*;
@@ -42,6 +43,8 @@ import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.*;
 import org.elasticsearch.common.unit.*;
 import org.elasticsearch.common.xcontent.*;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.*;
 
@@ -119,32 +122,43 @@ public class ElasticSearchClient implements Client {
 
     public List<String> retrievalIndexByAliases(String aliases) throws IOException {
         aliases = formatIndexName(aliases);
-
         Response response = client.getLowLevelClient().performRequest(HttpGet.METHOD_NAME, "/_alias/" + aliases);
-
-        List<String> indexes = new ArrayList<>();
         if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
             Gson gson = new Gson();
             InputStreamReader reader = new InputStreamReader(response.getEntity().getContent());
             JsonObject responseJson = gson.fromJson(reader, JsonObject.class);
             logger.debug("retrieval indexes by aliases {}, response is {}", aliases, responseJson);
-            indexes.addAll(responseJson.keySet());
+            return new ArrayList<>(responseJson.keySet());
         }
-        return indexes;
+        return Collections.EMPTY_LIST;
     }
 
-    public JsonObject getIndex(String indexName) throws IOException {
-        indexName = formatIndexName(indexName);
-        GetIndexRequest request = new GetIndexRequest();
-        request.indices(indexName);
-        Response response = client.getLowLevelClient().performRequest(HttpGet.METHOD_NAME, "/" + indexName);
-        InputStreamReader reader = new InputStreamReader(response.getEntity().getContent());
-        Gson gson = new Gson();
-        return gson.fromJson(reader, JsonObject.class);
+    /**
+     *  If your indexName is retrieved from elasticsearch through {@link #retrievalIndexByAliases(String)} or some other method and it already contains namespace.
+     *  Then you should delete the index by this method, this method will no longer concatenate namespace.
+     *
+     * https://github.com/apache/skywalking/pull/3017
+     *
+     */
+    public boolean deleteByIndexName(String indexName) throws IOException {
+        return deleteIndex(indexName, false);
     }
 
-    public boolean deleteIndex(String indexName) throws IOException {
-        indexName = formatIndexName(indexName);
+    /**
+     *  If your indexName is obtained from metadata or configuration and without namespace.
+     *  Then you should delete the index by this method, this method automatically concatenates namespace.
+     *
+     *  https://github.com/apache/skywalking/pull/3017
+     *
+     */
+    public boolean deleteByModelName(String modelName) throws IOException {
+        return deleteIndex(modelName, true);
+    }
+
+    private boolean deleteIndex(String indexName, boolean formatIndexName) throws IOException {
+        if (formatIndexName) {
+            indexName = formatIndexName(indexName);
+        }
         DeleteIndexRequest request = new DeleteIndexRequest(indexName);
         DeleteIndexResponse response;
         response = client.indices().delete(request);
@@ -216,11 +230,29 @@ public class ElasticSearchClient implements Client {
         return client.get(request);
     }
 
-    public MultiGetResponse multiGet(String indexName, List<String> ids) throws IOException {
-        final String newIndexName = formatIndexName(indexName);
-        MultiGetRequest request = new MultiGetRequest();
-        ids.forEach(id -> request.add(newIndexName, TYPE, id));
-        return client.multiGet(request);
+    public SearchResponse idQuery(String indexName, String id) throws IOException {
+        indexName = formatIndexName(indexName);
+
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(TYPE);
+        searchRequest.source().query(QueryBuilders.idsQuery().addIds(id));
+        return client.search(searchRequest);
+    }
+
+    public Map<String, Map<String, Object>> ids(String indexName, String... ids) throws IOException {
+        indexName = formatIndexName(indexName);
+
+        SearchRequest searchRequest = new SearchRequest(indexName);
+        searchRequest.types(TYPE);
+        searchRequest.source().query(QueryBuilders.idsQuery().addIds(ids)).size(ids.length);
+        SearchResponse response = client.search(searchRequest);
+
+        Map<String, Map<String, Object>> result = new HashMap<>();
+        SearchHit[] hits = response.getHits().getHits();
+        for (SearchHit hit : hits) {
+            result.put(hit.getId(), hit.getSourceAsMap());
+        }
+        return result;
     }
 
     public void forceInsert(String indexName, String id, XContentBuilder source) throws IOException {
