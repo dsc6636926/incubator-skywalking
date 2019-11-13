@@ -4,6 +4,7 @@ or providing commercial products including Apache SkyWalking.
 
 
 1. 300.cn 中企动力科技股份有限公司 http://www.300.cn/
+1. 360jinrong.net 360金融 https://www.360jinrong.net/
 1. 4399.com 四三九九网络股份有限公司. http://www.4399.com/
 1. 51mydao.com 买道传感科技（上海）有限公司 https://www.51mydao.com/
 1. 5i5j. 上海我爱我家房地产经纪有限公司 https://sh.5i5j.com/about/
@@ -27,6 +28,7 @@ or providing commercial products including Apache SkyWalking.
 1. CXIST.com 上海程析智能科技有限公司 https://www.cxist.com/
 1. Dangdang.com. 当当网. http://www.dangdang.com/
 1. DaoCloud. https://www.daocloud.io/
+1. deepblueai.com 深兰科技上海有限公司 https://www.deepblueai.com/
 1. Deyoushenghuo in WeChat app. 河南有态度信息科技有限公司，微信小程序：得有生活
 1. Dianfubao.com 垫富宝 https://www.dianfubao.com/
 1. Echplus.com 北京易诚互动网络技术有限公司 http://www.echplus.com/
@@ -38,12 +40,14 @@ or providing commercial products including Apache SkyWalking.
 1. GOME 国美 https://www.gome.com.cn/
 1. Guazi.com 瓜子二手车直卖网. https://www.guazi.com/
 1. guohuaitech.com 北京国槐信息科技有限公司. http://www.guohuaitech.com/
+1. GrowingIO 北京易数科技有限公司 https://www.growingio.com/
 1. Haier. 海尔消费金融 https://www.haiercash.com/
 1. Haoyunhu. 上海好运虎供应链管理有限公司 http://www.haoyunhu56.com/
 1. Huawei Inc. DevCloud. https://www.huaweicloud.com/devcloud/
 1. Hundun YUNRONG Fintech. 杭州恒生云融网络科技有限公司 https://www.hsjry.com/
 1. hunliji.com 婚礼纪 https://www.hunliji.com/
 1. iFLYTEK. 科大讯飞股份有限公司-消费者BG http://www.iflytek.com/
+1. juhaokan 聚好看科技股份有限公司 https://www.juhaokan.org/
 1. Ke.com. 贝壳找房. https://www.ke.com
 1. Keking.cn 凯京集团. http://www.keking.cn
 1. JoinTown. 九州通医药集团 http://www.jztey.com/
@@ -59,7 +63,9 @@ or providing commercial products including Apache SkyWalking.
 1. Mxnavi. 沈阳美行科技有限公司 http://www.mxnavi.com/
 1. Moji 墨叽（深圳）科技有限公司 https://www.mojivip.com
 1. Mypharma.com 北京融贯电子商务有限公司 https://www.mypharma.com
+1. NetEase 网易 https://www.163.com/
 1. Osacart in WeChat app 广州美克曼尼电子商务有限公司
+1. Peking University 北京大学
 1. Primeton.com 普元信息技术股份有限公司 http://www.primeton.com 
 1. qiniu.com 七牛云 http://qiniu.com 
 1. Qingyidai.com 轻易贷 https://www.qingyidai.com/
@@ -89,6 +95,7 @@ or providing commercial products including Apache SkyWalking.
 1. Weier. 广州文尔软件科技有限公司. https://www.site0.cn
 1. Wochu. 我厨买菜. https://www.wochu.cn
 1. Xiaomi. 小米. https://www.mi.com/en/
+1. xin.com 优信集团 http://www.xin.com
 1. Xinyebang.com 重庆欣业邦网络技术有限公司 http://www.xinyebang.com
 1. xueqiu.com 雪球财经. https://xueqiu.com/
 1. yibainetwork.com 深圳易佰网络有限公司 http://www.yibainetwork.com/
@@ -96,9 +103,10 @@ or providing commercial products including Apache SkyWalking.
 1. Yinji(shenzhen)Network Technology Co.,Ltd. 印记. http://www.yinjiyun.cn/
 1. Yonghui Superstores Co., Ltd. 永辉超市 http://www.yonghui.com.cn
 1. Youzan.com 杭州有赞科技有限公司 http://www.youzan.com/
+1. zhaopin.com 智联招聘 https://www.zhaopin.com/
 1. zjs.com.cn 北京宅急送快运股份有限公司 http://www.zjs.com.cn/
 
-# User Cases
+# Use Cases
 ## Alibaba Cloud
 Support SkyWalking agents and formats in Tracing Analysis cloud service.
 
@@ -114,6 +122,12 @@ Deploy SkyWalking in production environments.
 - Three ElasticSearch(Version 6.4.2, 40 CPUs, 96G RAM, 7T Disk) Nodes for Storage
 
 Support 60+ Instances, Over 300k Calls Per Minute, Over 50k Spans Per Second
+
+## guazi.com
+Guazi.com uses SkyWalking monitoring 270+ services, 
+including topology + metrics analysis, and collecting 1.1+ billion traces per day with 100% sampling. 
+
+Plan is 1k+ services and 5 billion traces per day.
 
 ## Oscart
 Use multiple language agents from SkyWalking and its ecosystem, including SkyWalking Javaagent and [SkyAPM nodejs agent](https://github.com/SkyAPM/SkyAPM-nodejs). SkyWalking OAP platform acts as backend and visualization.

@@ -9,9 +9,7 @@ microservices, cloud native and container-based (Docker, Kubernetes, Mesos) arch
 [![GitHub stars](https://img.shields.io/github/stars/apache/skywalking.svg?style=for-the-badge&label=Stars&logo=github)](https://github.com/apache/skywalking)
 [![Twitter Follow](https://img.shields.io/twitter/follow/asfskywalking.svg?style=for-the-badge&label=Follow&logo=twitter)](https://twitter.com/AsfSkyWalking)
 
-
 [![Maven Central](https://img.shields.io/maven-central/v/org.apache.skywalking/apache-skywalking-apm.svg)](http://skywalking.apache.org/downloads/)
-[![Build Status](https://travis-ci.org/apache/skywalking.svg?branch=master)](https://travis-ci.org/apache/skywalking)
 
 # Abstract
 **SkyWalking** is an open source APM system, including monitoring, tracing, diagnosing capabilities for distributed system
@@ -88,16 +86,30 @@ Follow this [document](docs/en/guides/How-to-build.md).
 # Contact Us
 * Submit an [issue](https://github.com/apache/skywalking/issues)
 * Mail list: **dev@skywalking.apache.org**. Mail to `dev-subscribe@skywalking.apache.org`, follow the reply to subscribe the mail list.
-* Join `#skywalking` channel at [Apache Slack](https://join.slack.com/t/the-asf/shared_invite/enQtNDQ3OTEwNzE1MDg5LWY2NjkwMTEzMGI2ZTI1NzUzMDk0MzJmMWM1NWVmODg0MzBjNjAxYzUwMjIwNDI3MjlhZWRjNmNhOTM5NmIxNDk)
+* Join `#skywalking` channel at [Apache Slack](https://join.slack.com/t/the-asf/shared_invite/enQtNzc2ODE3MjI1MDk1LTAyZGJmNTg1NWZhNmVmOWZjMjA2MGUyOGY4MjE5ZGUwOTQxY2Q3MDBmNTM5YTllNGU4M2QyMzQ4M2U4ZjQ5YmY). If the linke is not working, find the latest one at [Apache INFRA WIKI](https://cwiki.apache.org/confluence/display/INFRA/Slack+Guest+Invites).
 * QQ Group: 392443393(2000/2000, not available), 901167865(available)
 
 # Who Uses SkyWalking?
-A wide variety of companies and organizations use SkyWalking for research, production and commercial product.
-Here is the **User Wall** of SkyWalking.
+Hundreds of companies and organizations use SkyWalking for research, production, and commercial product, including
+1. Alibaba Cloud
+1. China Eastern Airlines
+1. China Merchants Bank
+1. DaoCloud
+1. GOME
+1. guazi.com
+1. Huawei
+1. ke.com
+1. lizhi.fm
+1. NetEase
+1. Peking University
+1. tetrate.io
+1. WeBank
+1. Xiaomi
+1. Yonghui Superstores Co., Ltd
+1. zhaopin.com
 
-<img src="http://skywalking.apache.org/assets/users-20190422.png"/>
-
-Users are encouraged to add themselves to the [PoweredBy](docs/powered-by.md) page.
+The [PoweredBy](docs/powered-by.md) page includes more users of the project.
+Users are encouraged to add themselves to there.
 
 # Landscapes
 
