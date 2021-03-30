@@ -15,6 +15,7 @@
  * limitations under the License.
  *
  */
+
 package org.apache.skywalking.apm.plugin.redisson.v3;
 
 import org.apache.skywalking.apm.agent.core.context.util.PeerFormat;
@@ -24,19 +25,16 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedI
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceMethodsAroundInterceptor;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
 import org.apache.skywalking.apm.plugin.redisson.v3.util.ClassUtil;
-import org.redisson.config.*;
+import org.redisson.config.Config;
 import org.redisson.connection.ConnectionManager;
 
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.Collection;
 
-/**
- * @author zhaoyuguang
- */
 public class ConnectionManagerInterceptor implements InstanceMethodsAroundInterceptor {
 
-    private static final ILog logger = LogManager.getLogger(ConnectionManagerInterceptor.class);
+    private static final ILog LOGGER = LogManager.getLogger(ConnectionManagerInterceptor.class);
 
     @Override
     public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
@@ -44,12 +42,13 @@ public class ConnectionManagerInterceptor implements InstanceMethodsAroundInterc
     }
 
     @Override
-    public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments,
-                              Class<?>[] argumentsTypes, Object ret) throws Throwable {
+    public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
+                              Object ret) throws Throwable {
         try {
             ConnectionManager connectionManager = (ConnectionManager) objInst;
             Config config = connectionManager.getCfg();
 
+            Object singleServerConfig = ClassUtil.getObjectField(config, "singleServerConfig");
             Object sentinelServersConfig = ClassUtil.getObjectField(config, "sentinelServersConfig");
             Object masterSlaveServersConfig = ClassUtil.getObjectField(config, "masterSlaveServersConfig");
             Object clusterServersConfig = ClassUtil.getObjectField(config, "clusterServersConfig");
@@ -58,6 +57,12 @@ public class ConnectionManagerInterceptor implements InstanceMethodsAroundInterc
             StringBuilder peer = new StringBuilder();
             EnhancedInstance retInst = (EnhancedInstance) ret;
 
+            if (singleServerConfig != null) {
+                Object singleAddress = ClassUtil.getObjectField(singleServerConfig, "address");
+                peer.append(getPeer(singleAddress));
+                retInst.setSkyWalkingDynamicField(PeerFormat.shorten(peer.toString()));
+                return ret;
+            }
             if (sentinelServersConfig != null) {
                 appendAddresses(peer, (Collection) ClassUtil.getObjectField(sentinelServersConfig, "sentinelAddresses"));
                 retInst.setSkyWalkingDynamicField(PeerFormat.shorten(peer.toString()));
@@ -81,7 +86,7 @@ public class ConnectionManagerInterceptor implements InstanceMethodsAroundInterc
                 return ret;
             }
         } catch (Exception e) {
-            logger.warn("redisClient set peer error: ", e);
+            LOGGER.warn("redisClient set peer error: ", e);
         }
         return ret;
     }
@@ -95,20 +100,20 @@ public class ConnectionManagerInterceptor implements InstanceMethodsAroundInterc
     }
 
     /**
-     * In some high versions of redisson, such as 3.11.1.
-     * The attribute address in the RedisClientConfig class is changed from the lower version of the URI to the String.
-     * So use the following code for compatibility.
+     * In some high versions of redisson, such as 3.11.1. The attribute address in the RedisClientConfig class is
+     * changed from the lower version of the URI to the String. So use the following code for compatibility.
+     *
      * @param obj Address object
      * @return the sw peer
      */
-    private String getPeer(Object obj) {
+    static String getPeer(Object obj) {
         if (obj instanceof String) {
             return ((String) obj).replace("redis://", "");
         } else if (obj instanceof URI) {
             URI uri = (URI) obj;
             return uri.getHost() + ":" + uri.getPort();
         } else {
-            logger.warn("redisson not support this version");
+            LOGGER.warn("redisson not support this version");
             return null;
         }
     }

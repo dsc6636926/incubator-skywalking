@@ -23,18 +23,20 @@ import com.alibaba.nacos.api.PropertyKeyConst;
 import com.alibaba.nacos.api.config.ConfigService;
 import com.alibaba.nacos.api.config.listener.Listener;
 import com.alibaba.nacos.api.exception.NacosException;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
+
+import org.apache.skywalking.apm.util.StringUtil;
 import org.apache.skywalking.oap.server.configuration.api.ConfigTable;
 import org.apache.skywalking.oap.server.configuration.api.ConfigWatcherRegister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-
-/**
- * @author kezhenxu94
- */
 public class NacosConfigWatcherRegister extends ConfigWatcherRegister {
     private static final Logger LOGGER = LoggerFactory.getLogger(NacosConfigWatcherRegister.class);
 
@@ -56,11 +58,18 @@ public class NacosConfigWatcherRegister extends ConfigWatcherRegister {
         final Properties properties = new Properties();
         properties.put(PropertyKeyConst.SERVER_ADDR, serverAddr + ":" + port);
         properties.put(PropertyKeyConst.NAMESPACE, settings.getNamespace());
+        if (StringUtil.isNotEmpty(settings.getUsername())) {
+            properties.put(PropertyKeyConst.USERNAME, settings.getUsername());
+            properties.put(PropertyKeyConst.PASSWORD, settings.getPassword());
+        } else if (StringUtil.isNotEmpty(settings.getAccessKey())) {
+            properties.put(PropertyKeyConst.ACCESS_KEY, settings.getAccessKey());
+            properties.put(PropertyKeyConst.SECRET_KEY, settings.getSecretKey());
+        }
         this.configService = NacosFactory.createConfigService(properties);
     }
 
     @Override
-    public ConfigTable readConfig(Set<String> keys) {
+    public Optional<ConfigTable> readConfig(Set<String> keys) {
         removeUninterestedKeys(keys);
         registerKeyListeners(keys);
 
@@ -77,7 +86,7 @@ public class NacosConfigWatcherRegister extends ConfigWatcherRegister {
             }
         }
 
-        return table;
+        return Optional.of(table);
     }
 
     private void registerKeyListeners(final Set<String> keys) {

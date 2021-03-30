@@ -18,6 +18,7 @@
 
 package org.apache.skywalking.apm.plugin.kafka;
 
+import java.util.List;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.skywalking.apm.agent.core.context.MockContextSnapshot;
 import org.apache.skywalking.apm.agent.core.context.trace.AbstractTracingSpan;
@@ -26,7 +27,12 @@ import org.apache.skywalking.apm.agent.core.context.trace.TraceSegmentRef;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
 import org.apache.skywalking.apm.agent.test.helper.SegmentHelper;
 import org.apache.skywalking.apm.agent.test.helper.SpanHelper;
-import org.apache.skywalking.apm.agent.test.tools.*;
+import org.apache.skywalking.apm.agent.test.tools.AgentServiceRule;
+import org.apache.skywalking.apm.agent.test.tools.SegmentRefAssert;
+import org.apache.skywalking.apm.agent.test.tools.SegmentStorage;
+import org.apache.skywalking.apm.agent.test.tools.SegmentStoragePoint;
+import org.apache.skywalking.apm.agent.test.tools.SpanAssert;
+import org.apache.skywalking.apm.agent.test.tools.TracingSegmentRunner;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -35,8 +41,6 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
-
-import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -61,31 +65,45 @@ public class CallbackInterceptorTest {
     private Object[] argumentsWithException;
     private Class[] argumentTypes;
 
-    private EnhancedInstance callBackInstance = new EnhancedInstance() {
-        @Override public Object getSkyWalkingDynamicField() {
-            CallbackCache cache = new CallbackCache();
-            cache.setSnapshot(MockContextSnapshot.INSTANCE.mockContextSnapshot());
+    private EnhancedInstance callBackInstance;
+
+    private static class CallbackInstance implements EnhancedInstance {
+        private CallbackCache cache;
+
+        public CallbackInstance(CallbackCache cache) {
+            this.cache = cache;
+        }
+
+        @Override
+        public Object getSkyWalkingDynamicField() {
             return cache;
         }
 
-        @Override public void setSkyWalkingDynamicField(Object value) {
-
+        @Override
+        public void setSkyWalkingDynamicField(Object value) {
         }
-    };
+    }
 
     @Before
     public void setUp() {
         callbackInterceptor = new CallbackInterceptor();
 
+        CallbackCache cache = new CallbackCache();
+        cache.setSnapshot(MockContextSnapshot.INSTANCE.mockContextSnapshot());
+        callBackInstance = new CallbackInstance(cache);
+
         arguments = new Object[] {
-            recordMetadata, null
+            recordMetadata,
+            null
         };
         argumentsWithException = new Object[] {
-            recordMetadata, new RuntimeException()
+            recordMetadata,
+            new RuntimeException()
         };
 
         argumentTypes = new Class[] {
-            RecordMetadata.class, Exception.class
+            RecordMetadata.class,
+            Exception.class
         };
 
     }
@@ -124,6 +142,27 @@ public class CallbackInterceptorTest {
         assertCallbackSegmentRef(traceSegment.getRefs());
     }
 
+    @Test
+    public void testCallbackWithCallbackAdapterInterceptor() throws Throwable {
+        CallbackCache cacheForAdapter = new CallbackCache();
+        cacheForAdapter.setSnapshot(MockContextSnapshot.INSTANCE.mockContextSnapshot());
+        CallbackAdapterInterceptor callbackAdapterInterceptor = new CallbackAdapterInterceptor(cacheForAdapter);
+
+        CallbackCache cache = new CallbackCache();
+        cache.setCallback(callbackAdapterInterceptor);
+        EnhancedInstance instance = new CallbackInstance(cache);
+        callbackInterceptor.beforeMethod(instance, null, arguments, argumentTypes, null);
+        callbackInterceptor.afterMethod(instance, null, arguments, argumentTypes, null);
+    }
+
+    @Test
+    public void testCallbackWithNullCallbackCache() throws Throwable {
+        EnhancedInstance instance = new CallbackInstance(null);
+        callbackInterceptor.beforeMethod(instance, null, arguments, argumentTypes, null);
+        callbackInterceptor.afterMethod(instance, null, arguments, argumentTypes, null);
+        callbackInterceptor.handleMethodException(instance, null, arguments, argumentTypes, null);
+    }
+
     private void assertCallbackSpanWithException(AbstractTracingSpan span) {
         assertCallbackSpan(span);
 
@@ -136,7 +175,6 @@ public class CallbackInterceptorTest {
 
         TraceSegmentRef segmentRef = refs.get(0);
         SegmentRefAssert.assertSpanId(segmentRef, 1);
-        assertThat(segmentRef.getEntryEndpointName(), is("/for-test-entryOperationName"));
     }
 
     private void assertCallbackSpan(AbstractTracingSpan span) {

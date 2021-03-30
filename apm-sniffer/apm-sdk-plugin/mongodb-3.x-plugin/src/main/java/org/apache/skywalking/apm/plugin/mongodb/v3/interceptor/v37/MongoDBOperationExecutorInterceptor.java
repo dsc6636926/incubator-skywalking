@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.mongodb.v3.interceptor.v37;
 
 import org.apache.skywalking.apm.agent.core.context.ContextManager;
@@ -30,41 +29,36 @@ import org.apache.skywalking.apm.plugin.mongodb.v3.support.MongoSpanHelper;
 
 import java.lang.reflect.Method;
 
-/**
- * @author scolia
- */
 @SuppressWarnings("Duplicates")
 public class MongoDBOperationExecutorInterceptor implements InstanceMethodsAroundInterceptor {
 
-    private static final ILog logger = LogManager.getLogger(MongoDBOperationExecutorInterceptor.class);
+    private static final ILog LOGGER = LogManager.getLogger(MongoDBOperationExecutorInterceptor.class);
 
     @Override
     public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
-                             MethodInterceptResult result) {
+        MethodInterceptResult result) {
         String executeMethod = allArguments[0].getClass().getSimpleName();
         // OperationExecutor has be mark it's remotePeer
         // @see: MongoDBClientDelegateInterceptor.afterMethod
         String remotePeer = (String) objInst.getSkyWalkingDynamicField();
-        if (logger.isDebugEnable()) {
-            logger.debug("Mongo execute: [executeMethod: {}, remotePeer: {}]", executeMethod, remotePeer);
+        if (LOGGER.isDebugEnable()) {
+            LOGGER.debug("Mongo execute: [executeMethod: {}, remotePeer: {}]", executeMethod, remotePeer);
         }
         MongoSpanHelper.createExitSpan(executeMethod, remotePeer, allArguments[0]);
     }
 
     @Override
     public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
-                              Object ret) {
+        Object ret) {
         ContextManager.stopSpan();
         return ret;
     }
 
     @Override
     public void handleMethodException(EnhancedInstance objInst, Method method, Object[] allArguments,
-                                      Class<?>[] argumentsTypes, Throwable t) {
+        Class<?>[] argumentsTypes, Throwable t) {
         AbstractSpan activeSpan = ContextManager.activeSpan();
-        activeSpan.errorOccurred();
         activeSpan.log(t);
     }
-
 
 }

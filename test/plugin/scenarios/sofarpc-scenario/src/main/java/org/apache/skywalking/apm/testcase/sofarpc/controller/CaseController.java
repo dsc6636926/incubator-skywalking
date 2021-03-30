@@ -25,9 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author zhangwei
- */
 @RestController
 @RequestMapping("/case")
 public class CaseController {
@@ -47,7 +44,7 @@ public class CaseController {
     @ResponseBody
     public String sofarpc() {
         SofaRpcDemoService service = consumerConfig.refer();
-        System.out.println(service.hello("sofarpc"));
+        service.hello("sofarpc");
         return SUCCESS;
     }
 }

@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
@@ -38,10 +40,13 @@ public class TestController {
     public String testcase() throws IOException {
         visit("http://" + hostBAddress + "/testcase/annotation/success");
         visit("http://" + hostBAddress + "/testcase/annotation/error");
+        visit("http://" + hostBAddress + "/testcase/annotation/foo");
+        visit("http://" + hostBAddress + "/testcase/annotation/loo");
         visit("http://" + hostBAddress + "/testcase/route/success");
         visit("http://" + hostBAddress + "/testcase/route/error");
         visit("http://" + hostBAddress + "/notFound");
         visit("http://" + hostBAddress + "/testcase/annotation/mono/hello");
+        testGet("http://" + hostBAddress + "/testcase/webclient/server");
         return "test";
     }
 
@@ -51,11 +56,24 @@ public class TestController {
         return "test";
     }
 
-    private void visit(String path){
+    private void visit(String path) {
         try {
             httpUtils.visit(path);
         } catch (Exception i) {
 
         }
+    }
+
+    /**
+     * test webflux webclient plugin
+     */
+    private void testGet(String remoteUri) {
+        Mono<String> response = WebClient
+                .create()
+                .get()
+                .uri(remoteUri)
+                .retrieve()
+                .bodyToMono(String.class);
+        response.subscribe();
     }
 }

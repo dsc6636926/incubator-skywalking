@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.mongodb.v3.support;
 
 import com.mongodb.bulk.DeleteRequest;
@@ -40,17 +39,15 @@ import com.mongodb.operation.MapReduceToCollectionOperation;
 import com.mongodb.operation.MapReduceWithInlineResultsOperation;
 import com.mongodb.operation.MixedBulkWriteOperation;
 import com.mongodb.operation.UpdateOperation;
-import org.apache.skywalking.apm.agent.core.conf.Config;
+import java.util.List;
+import org.apache.skywalking.apm.plugin.mongodb.v3.MongoPluginConfig;
 import org.bson.BsonDocument;
 
-import java.util.List;
-
-/**
- * @author scolia
- */
-@SuppressWarnings({"deprecation", "Duplicates"})
+@SuppressWarnings({
+    "deprecation",
+    "Duplicates"
+})
 public class MongoOperationHelper {
-
 
     private MongoOperationHelper() {
 
@@ -128,10 +125,9 @@ public class MongoOperationHelper {
             } else if (request instanceof UpdateRequest) {
                 params.append(((UpdateRequest) request).getFilter()).append(",");
             }
-            final int filterLengthLimit = Config.Plugin.MongoDB.FILTER_LENGTH_LIMIT;
+            final int filterLengthLimit = MongoPluginConfig.Plugin.MongoDB.FILTER_LENGTH_LIMIT;
             if (filterLengthLimit > 0 && params.length() > filterLengthLimit) {
-                params.append("...");
-                break;
+                return params.substring(0, filterLengthLimit) + "...";
             }
         }
         return params.toString();
@@ -139,7 +135,7 @@ public class MongoOperationHelper {
 
     private static String limitFilter(String filter) {
         final StringBuilder params = new StringBuilder();
-        final int filterLengthLimit = Config.Plugin.MongoDB.FILTER_LENGTH_LIMIT;
+        final int filterLengthLimit = MongoPluginConfig.Plugin.MongoDB.FILTER_LENGTH_LIMIT;
         if (filterLengthLimit > 0 && filter.length() > filterLengthLimit) {
             return params.append(filter, 0, filterLengthLimit).append("...").toString();
         } else {

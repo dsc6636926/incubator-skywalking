@@ -24,7 +24,7 @@ import com.networknt.handler.MiddlewareHandler;
 import com.networknt.handler.OrchestrationHandler;
 import io.undertow.server.HttpServerExchange;
 import io.undertow.util.HeaderMap;
-import org.apache.skywalking.apm.agent.core.conf.Config;
+import java.lang.reflect.Method;
 import org.apache.skywalking.apm.agent.core.context.CarrierItem;
 import org.apache.skywalking.apm.agent.core.context.ContextCarrier;
 import org.apache.skywalking.apm.agent.core.context.ContextManager;
@@ -37,20 +37,16 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceM
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.MethodInterceptResult;
 import org.apache.skywalking.apm.network.trace.component.ComponentsDefine;
 
-import java.lang.reflect.Method;
-
 /**
- * {@link HandleRequestInterceptor} creates an entry span before the execution of
- * {@link com.networknt.exception.ExceptionHandler#handleRequest(HttpServerExchange)} in the I/O thread.
- *
- * If the {@link Config.Plugin.Light4J#TRACE_HANDLER_CHAIN} flag is set, additionally a local span is produced for each
- * {@link com.networknt.handler.MiddlewareHandler} and business handler before their respective
- * {@link com.networknt.handler.LightHttpHandler#handleRequest(HttpServerExchange)} method executes.
- * Since {@link com.networknt.handler.LightHttpHandler} is implemented by various middleware and business handlers and
- * the Light4J framework delegates to these in succession, a chain of
- * {@link org.apache.skywalking.apm.agent.core.context.trace.LocalSpan}s will be produced.
- *
- * @author tsuilouis
+ * {@link HandleRequestInterceptor} creates an entry span before the execution of {@link
+ * com.networknt.exception.ExceptionHandler#handleRequest(HttpServerExchange)} in the I/O thread.
+ * <p>
+ * If the {@link Light4JPluginConfig.Plugin.Light4J#TRACE_HANDLER_CHAIN} flag is set, additionally a local span is produced
+ * for each {@link com.networknt.handler.MiddlewareHandler} and business handler before their respective {@link
+ * com.networknt.handler.LightHttpHandler#handleRequest(HttpServerExchange)} method executes. Since {@link
+ * com.networknt.handler.LightHttpHandler} is implemented by various middleware and business handlers and the Light4J
+ * framework delegates to these in succession, a chain of {@link org.apache.skywalking.apm.agent.core.context.trace.LocalSpan}s
+ * will be produced.
  */
 public class HandleRequestInterceptor implements InstanceMethodsAroundInterceptor {
 
@@ -86,21 +82,19 @@ public class HandleRequestInterceptor implements InstanceMethodsAroundIntercepto
                 ContextManager.stopSpan(span);
 
                 objInst.setSkyWalkingDynamicField(ContextManager.capture());
-            } else if (Config.Plugin.Light4J.TRACE_HANDLER_CHAIN) {
+            } else if (Light4JPluginConfig.Plugin.Light4J.TRACE_HANDLER_CHAIN) {
                 String operationName = objInst.getClass().getName() + "." + method.getName();
 
                 ContextSnapshot snapshot = (ContextSnapshot) objInst.getSkyWalkingDynamicField();
-                ContextManager.createLocalSpan(operationName)
-                        .setComponent(ComponentsDefine.LIGHT_4J);
+                ContextManager.createLocalSpan(operationName).setComponent(ComponentsDefine.LIGHT_4J);
 
                 ContextManager.continued(snapshot);
             }
-        } else if (Config.Plugin.Light4J.TRACE_HANDLER_CHAIN &&
-            (isMiddlewareHandler(objInst) || isBusinessHandler(objInst))) {
+        } else if (Light4JPluginConfig.Plugin.Light4J.TRACE_HANDLER_CHAIN && (isMiddlewareHandler(
+            objInst) || isBusinessHandler(objInst))) {
             String operationName = objInst.getClass().getName() + "." + method.getName();
 
-            ContextManager.createLocalSpan(operationName)
-                    .setComponent(ComponentsDefine.LIGHT_4J);
+            ContextManager.createLocalSpan(operationName).setComponent(ComponentsDefine.LIGHT_4J);
         }
     }
 
@@ -110,11 +104,11 @@ public class HandleRequestInterceptor implements InstanceMethodsAroundIntercepto
         if (isExceptionHandler(objInst)) {
             HttpServerExchange exchange = (HttpServerExchange) allArguments[0];
 
-            if (Config.Plugin.Light4J.TRACE_HANDLER_CHAIN && !exchange.isInIoThread()) {
+            if (Light4JPluginConfig.Plugin.Light4J.TRACE_HANDLER_CHAIN && !exchange.isInIoThread()) {
                 ContextManager.stopSpan();
             }
-        } else if (Config.Plugin.Light4J.TRACE_HANDLER_CHAIN &&
-                (isMiddlewareHandler(objInst) || isBusinessHandler(objInst))) {
+        } else if (Light4JPluginConfig.Plugin.Light4J.TRACE_HANDLER_CHAIN && (isMiddlewareHandler(
+            objInst) || isBusinessHandler(objInst))) {
             ContextManager.stopSpan();
         }
         return ret;
@@ -122,13 +116,14 @@ public class HandleRequestInterceptor implements InstanceMethodsAroundIntercepto
 
     @Override
     public void handleMethodException(EnhancedInstance objInst, Method method, Object[] allArguments,
-                                      Class<?>[] argumentsTypes,
-                                      Throwable t) {
-        ContextManager.activeSpan().errorOccurred().log(t);
+                                      Class<?>[] argumentsTypes, Throwable t) {
+        ContextManager.activeSpan().log(t);
     }
 
     private boolean isBusinessHandler(EnhancedInstance objInst) {
-        return !objInst.getClass().getInterfaces()[0].equals(MiddlewareHandler.class) && !objInst.getClass().equals(OrchestrationHandler.class);
+        return !objInst.getClass().getInterfaces()[0].equals(MiddlewareHandler.class) && !objInst.getClass()
+                                                                                                 .equals(
+                                                                                                     OrchestrationHandler.class);
     }
 
     private boolean isMiddlewareHandler(EnhancedInstance objInst) {

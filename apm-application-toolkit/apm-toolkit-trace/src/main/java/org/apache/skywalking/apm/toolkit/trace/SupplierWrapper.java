@@ -15,19 +15,17 @@
  * limitations under the License.
  *
  */
+
 package org.apache.skywalking.apm.toolkit.trace;
 
 import java.util.function.Supplier;
 
-/**
- * @author sxzaihua
- */
 @TraceCrossThread
 public class SupplierWrapper<V> implements Supplier<V> {
     final Supplier<V> supplier;
 
-    public static <V> SupplierWrapper of(Supplier<V> r) {
-        return new SupplierWrapper<V>(r);
+    public static <V> SupplierWrapper<V> of(Supplier<V> r) {
+        return new SupplierWrapper<>(r);
     }
 
     public SupplierWrapper(Supplier<V> supplier) {

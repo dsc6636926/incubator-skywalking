@@ -18,17 +18,15 @@
 
 package org.apache.skywalking.oap.server.configuration.consul;
 
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Sets;
 import com.google.common.io.BaseEncoding;
-import com.orbitz.consul.KeyValueClient;
 import com.orbitz.consul.cache.ConsulCache;
 import com.orbitz.consul.cache.KVCache;
 import com.orbitz.consul.model.kv.ImmutableValue;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +34,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.reflect.Whitebox;
@@ -47,12 +46,19 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/**
- * @author kezhenxu94
- */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(KVCache.class)
-@SuppressWarnings({"unchecked", "OptionalGetWithoutIsPresent"})
+@PowerMockIgnore({
+    "com.sun.org.apache.xerces.*",
+    "javax.xml.*",
+    "org.xml.*",
+    "javax.management.*",
+    "org.w3c.*"
+})
+@SuppressWarnings({
+    "unchecked",
+    "OptionalGetWithoutIsPresent"
+})
 public class ConsulConfigurationWatcherRegisterTest {
     @Mock
     private ConsulConfigurationWatcherRegister register;
@@ -78,8 +84,8 @@ public class ConsulConfigurationWatcherRegisterTest {
         ArgumentCaptor<ConsulCache.Listener> listener2 = ArgumentCaptor.forClass(ConsulCache.Listener.class);
 
         PowerMockito.mockStatic(KVCache.class);
-        PowerMockito.when(KVCache.newCache(any(KeyValueClient.class), eq("key1"))).thenReturn(cache1);
-        PowerMockito.when(KVCache.newCache(any(KeyValueClient.class), eq("key2"))).thenReturn(cache2);
+        PowerMockito.when(KVCache.newCache(any(), eq("key1"))).thenReturn(cache1);
+        PowerMockito.when(KVCache.newCache(any(), eq("key2"))).thenReturn(cache2);
 
         when(register.readConfig(any(Set.class))).thenCallRealMethod();
 
@@ -88,32 +94,24 @@ public class ConsulConfigurationWatcherRegisterTest {
         verify(cache1).addListener(listener1.capture());
         verify(cache2).addListener(listener2.capture());
 
-        listener1.getValue().notify(
-            ImmutableMap.of(
-                "key1",
-                ImmutableValue
-                    .builder()
-                    .createIndex(0)
-                    .modifyIndex(0)
-                    .lockIndex(0)
-                    .key("key1")
-                    .flags(0)
-                    .value(BaseEncoding.base64().encode("val1".getBytes()))
-                    .build())
-        );
-        listener2.getValue().notify(
-            ImmutableMap.of(
-                "key2",
-                ImmutableValue
-                    .builder()
-                    .createIndex(0)
-                    .modifyIndex(0)
-                    .lockIndex(0)
-                    .key("key2")
-                    .flags(0)
-                    .value(BaseEncoding.base64().encode("val2".getBytes()))
-                    .build())
-        );
+        listener1.getValue()
+                 .notify(ImmutableMap.of("key1", ImmutableValue.builder()
+                                                               .createIndex(0)
+                                                               .modifyIndex(0)
+                                                               .lockIndex(0)
+                                                               .key("key1")
+                                                               .flags(0)
+                                                               .value(BaseEncoding.base64().encode("val1".getBytes()))
+                                                               .build()));
+        listener2.getValue()
+                 .notify(ImmutableMap.of("key2", ImmutableValue.builder()
+                                                               .createIndex(0)
+                                                               .modifyIndex(0)
+                                                               .lockIndex(0)
+                                                               .key("key2")
+                                                               .flags(0)
+                                                               .value(BaseEncoding.base64().encode("val2".getBytes()))
+                                                               .build()));
 
         assertEquals(2, configItemKeyedByName.size());
         assertEquals("val1", configItemKeyedByName.get("key1").get());
@@ -137,8 +135,8 @@ public class ConsulConfigurationWatcherRegisterTest {
         ArgumentCaptor<ConsulCache.Listener> listener2 = ArgumentCaptor.forClass(ConsulCache.Listener.class);
 
         PowerMockito.mockStatic(KVCache.class);
-        PowerMockito.when(KVCache.newCache(any(KeyValueClient.class), eq("key1"))).thenReturn(cache1);
-        PowerMockito.when(KVCache.newCache(any(KeyValueClient.class), eq("key2"))).thenReturn(cache2);
+        PowerMockito.when(KVCache.newCache(any(), eq("key1"))).thenReturn(cache1);
+        PowerMockito.when(KVCache.newCache(any(), eq("key2"))).thenReturn(cache2);
 
         when(register.readConfig(any(Set.class))).thenCallRealMethod();
 

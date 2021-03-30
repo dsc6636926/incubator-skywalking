@@ -17,22 +17,22 @@
 
 package org.apache.skywalking.apm.testcase.netty.socketio;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 public class HealthCheckServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // start socket io server and client on heath check
-        SocketIOStarter.startServer();
         try {
-            SocketIOStarter.startClientAndWaitConnect();
-        } catch (Exception e) {
+            SocketIOStarter.getInstance().healthCheck();
+        } catch (InterruptedException e) {
+            throw new IOException(e);
         }
 
         PrintWriter writer = resp.getWriter();

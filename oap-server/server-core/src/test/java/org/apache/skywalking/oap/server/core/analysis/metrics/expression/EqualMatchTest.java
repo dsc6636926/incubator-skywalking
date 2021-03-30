@@ -20,11 +20,9 @@ package org.apache.skywalking.oap.server.core.analysis.metrics.expression;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-/**
- * @author kezhenxu94
- */
 public class EqualMatchTest {
 
     @Test
@@ -57,5 +55,12 @@ public class EqualMatchTest {
         Float b = 334.0F;
         boolean match = new EqualMatch().match(a, b);
         assertTrue(match);
+    }
+
+    @Test
+    public void stringShouldEqual() {
+        assertTrue(new EqualMatch().match("\"a\"", "a"));
+        assertTrue(new EqualMatch().match("a", "a"));
+        assertFalse(new EqualMatch().match("\"a\"", "ab"));
     }
 }

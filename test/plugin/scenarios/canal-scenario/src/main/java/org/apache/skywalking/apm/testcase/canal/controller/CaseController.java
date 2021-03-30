@@ -18,10 +18,11 @@
 
 package org.apache.skywalking.apm.testcase.canal.controller;
 
-
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
+import java.net.InetSocketAddress;
+import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,10 +31,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.InetSocketAddress;
-import java.util.function.Consumer;
-
-
 @Controller
 @RequestMapping("/case")
 @PropertySource("classpath:application.properties")
@@ -41,14 +38,13 @@ public class CaseController {
 
     private static final String SUCCESS = "Success";
 
-    private Logger logger = LoggerFactory.getLogger(CaseController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CaseController.class);
 
     @Value(value = "${canal.host}")
     private String address;
 
     @Value(value = "${canal.port}")
     private int port;
-
 
     @RequestMapping("/canal-case")
     @ResponseBody
@@ -60,10 +56,10 @@ public class CaseController {
                 connector.rollback();
                 Message message = connector.getWithoutAck(batchSize);
                 long batchId = message.getId();
-                logger.info(message.getEntries().toString());
+                LOGGER.info(message.getEntries().toString());
                 connector.ack(batchId);
             } catch (Exception ex) {
-                logger.error(ex.toString());
+                LOGGER.error(ex.toString());
             }
         });
         return SUCCESS;

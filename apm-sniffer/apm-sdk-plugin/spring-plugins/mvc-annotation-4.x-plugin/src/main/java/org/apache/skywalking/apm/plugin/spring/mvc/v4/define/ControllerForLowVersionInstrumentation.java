@@ -25,7 +25,7 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.ConstructorInterc
 import static net.bytebuddy.matcher.ElementMatchers.any;
 
 public class ControllerForLowVersionInstrumentation extends AbstractControllerInstrumentation {
-    public static final String WITNESS_CLASSES_LOW_VERSION = "org.springframework.web.context.support.ServletContextPropertyPlaceholderConfigurer";
+    public static final String WITNESS_CLASSES_LOW_VERSION = "org.springframework.web.method.HandlerMethodSelector";
 
     public static final String ENHANCE_ANNOTATION = "org.springframework.stereotype.Controller";
 
@@ -42,16 +42,20 @@ public class ControllerForLowVersionInstrumentation extends AbstractControllerIn
                 return "org.apache.skywalking.apm.plugin.spring.mvc.v4.ControllerForLowVersionConstructorInterceptor";
             }
         };
-        return new ConstructorInterceptPoint[]{constructorInterceptPoint};
+        return new ConstructorInterceptPoint[] {constructorInterceptPoint};
     }
 
     @Override
     protected String[] witnessClasses() {
-        return new String[]{WITHNESS_CLASSES, "org.springframework.cache.interceptor.DefaultKeyGenerator", WITNESS_CLASSES_LOW_VERSION};
+        return new String[] {
+            WITHNESS_CLASSES,
+            "org.springframework.cache.interceptor.DefaultKeyGenerator",
+            WITNESS_CLASSES_LOW_VERSION
+        };
     }
 
     @Override
     protected String[] getEnhanceAnnotations() {
-        return new String[]{ENHANCE_ANNOTATION};
+        return new String[] {ENHANCE_ANNOTATION};
     }
 }

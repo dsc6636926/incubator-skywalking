@@ -24,20 +24,16 @@ import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.InstanceC
 
 /**
  * intercept Callback set cache
- * @author stalary
  **/
 public class CallbackConstructorInterceptor implements InstanceConstructorInterceptor {
 
     @Override
     public void onConstruct(EnhancedInstance objInst, Object[] allArguments) {
         Callback callback = (Callback) allArguments[0];
-        CallbackCache cache;
-        if (null != objInst.getSkyWalkingDynamicField()) {
-            cache = (CallbackCache) objInst.getSkyWalkingDynamicField();
-        } else {
-            cache = new CallbackCache();
+        if (null != callback) {
+            CallbackCache cache = new CallbackCache();
+            cache.setCallback(callback);
+            objInst.setSkyWalkingDynamicField(cache);
         }
-        cache.setCallback(callback);
-        objInst.setSkyWalkingDynamicField(cache);
     }
 }

@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.mongodb.v3.interceptor.v37;
 
 import com.mongodb.connection.Cluster;
@@ -30,13 +29,10 @@ import org.apache.skywalking.apm.plugin.mongodb.v3.support.MongoRemotePeerHelper
 
 import java.lang.reflect.Method;
 
-/**
- * @author scolia
- */
 @SuppressWarnings("Duplicates")
 public class MongoDBClientDelegateInterceptor implements InstanceConstructorInterceptor, InstanceMethodsAroundInterceptor {
 
-    private static final ILog logger = LogManager.getLogger(MongoDBClientDelegateInterceptor.class);
+    private static final ILog LOGGER = LogManager.getLogger(MongoDBClientDelegateInterceptor.class);
 
     @SuppressWarnings("deprecation")
     @Override
@@ -47,21 +43,21 @@ public class MongoDBClientDelegateInterceptor implements InstanceConstructorInte
     }
 
     @Override
-    public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments,
-                             Class<?>[] argumentsTypes, MethodInterceptResult result) {
+    public void beforeMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
+        MethodInterceptResult result) {
         // do nothing
     }
 
     @Override
-    public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments,
-                              Class<?>[] argumentsTypes, Object ret) {
+    public Object afterMethod(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes,
+        Object ret) {
         if (ret instanceof EnhancedInstance) {
             // pass remotePeer to OperationExecutor, which will be wrapper as EnhancedInstance
             // @see: org.apache.skywalking.apm.plugin.mongodb.v3.define.v37.MongoDBOperationExecutorInstrumentation
             EnhancedInstance retInstance = (EnhancedInstance) ret;
             String remotePeer = (String) objInst.getSkyWalkingDynamicField();
-            if (logger.isDebugEnable()) {
-                logger.debug("Mark OperationExecutor remotePeer: {}", remotePeer);
+            if (LOGGER.isDebugEnable()) {
+                LOGGER.debug("Mark OperationExecutor remotePeer: {}", remotePeer);
             }
             retInstance.setSkyWalkingDynamicField(remotePeer);
         }
@@ -69,7 +65,8 @@ public class MongoDBClientDelegateInterceptor implements InstanceConstructorInte
     }
 
     @Override
-    public void handleMethodException(EnhancedInstance objInst, Method method, Object[] allArguments, Class<?>[] argumentsTypes, Throwable t) {
+    public void handleMethodException(EnhancedInstance objInst, Method method, Object[] allArguments,
+        Class<?>[] argumentsTypes, Throwable t) {
         // do nothing
     }
 }

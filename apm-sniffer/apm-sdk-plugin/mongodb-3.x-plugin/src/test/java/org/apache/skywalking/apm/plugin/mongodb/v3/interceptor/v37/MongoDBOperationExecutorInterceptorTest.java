@@ -16,7 +16,6 @@
  *
  */
 
-
 package org.apache.skywalking.apm.plugin.mongodb.v3.interceptor.v37;
 
 import com.mongodb.MongoNamespace;
@@ -24,7 +23,8 @@ import com.mongodb.ReadConcern;
 import com.mongodb.client.internal.OperationExecutor;
 import com.mongodb.operation.FindOperation;
 import com.mongodb.operation.WriteOperation;
-import org.apache.skywalking.apm.agent.core.conf.Config;
+import java.lang.reflect.Method;
+import java.util.List;
 import org.apache.skywalking.apm.agent.core.context.trace.AbstractTracingSpan;
 import org.apache.skywalking.apm.agent.core.context.trace.LogDataEntity;
 import org.apache.skywalking.apm.agent.core.context.trace.SpanLayer;
@@ -33,7 +33,12 @@ import org.apache.skywalking.apm.agent.core.context.util.TagValuePair;
 import org.apache.skywalking.apm.agent.core.plugin.interceptor.enhance.EnhancedInstance;
 import org.apache.skywalking.apm.agent.test.helper.SegmentHelper;
 import org.apache.skywalking.apm.agent.test.helper.SpanHelper;
-import org.apache.skywalking.apm.agent.test.tools.*;
+import org.apache.skywalking.apm.agent.test.tools.AgentServiceRule;
+import org.apache.skywalking.apm.agent.test.tools.SegmentStorage;
+import org.apache.skywalking.apm.agent.test.tools.SegmentStoragePoint;
+import org.apache.skywalking.apm.agent.test.tools.SpanAssert;
+import org.apache.skywalking.apm.agent.test.tools.TracingSegmentRunner;
+import org.apache.skywalking.apm.plugin.mongodb.v3.MongoPluginConfig;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 import org.bson.codecs.Decoder;
@@ -48,16 +53,10 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.powermock.modules.junit4.PowerMockRunnerDelegate;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.when;
 
-/**
- * @author scolia
- */
 @RunWith(PowerMockRunner.class)
 @PowerMockRunnerDelegate(TracingSegmentRunner.class)
 public class MongoDBOperationExecutorInterceptorTest {
@@ -82,7 +81,7 @@ public class MongoDBOperationExecutorInterceptorTest {
 
         interceptor = new MongoDBOperationExecutorInterceptor();
 
-        Config.Plugin.MongoDB.TRACE_PARAM = true;
+        MongoPluginConfig.Plugin.MongoDB.TRACE_PARAM = true;
 
         when(enhancedInstance.getSkyWalkingDynamicField()).thenReturn("127.0.0.1:27017");
 
@@ -93,8 +92,8 @@ public class MongoDBOperationExecutorInterceptorTest {
         FindOperation findOperation = new FindOperation(mongoNamespace, decoder);
         findOperation.filter(document);
 
-        arguments = new Object[]{findOperation};
-        argumentTypes = new Class[]{findOperation.getClass()};
+        arguments = new Object[] {findOperation};
+        argumentTypes = new Class[] {findOperation.getClass()};
     }
 
     @Test
@@ -111,7 +110,8 @@ public class MongoDBOperationExecutorInterceptorTest {
     @Test
     public void testInterceptWithException() throws Throwable {
         interceptor.beforeMethod(enhancedInstance, getMethod(), arguments, argumentTypes, null);
-        interceptor.handleMethodException(enhancedInstance, getMethod(), arguments, argumentTypes, new RuntimeException());
+        interceptor.handleMethodException(
+            enhancedInstance, getMethod(), arguments, argumentTypes, new RuntimeException());
         interceptor.afterMethod(enhancedInstance, getMethod(), arguments, argumentTypes, null);
 
         MatcherAssert.assertThat(segmentStorage.getTraceSegments().size(), is(1));
@@ -127,7 +127,7 @@ public class MongoDBOperationExecutorInterceptorTest {
         assertThat(span.getOperationName(), is("MongoDB/FindOperation"));
         assertThat(SpanHelper.getComponentId(span), is(42));
         List<TagValuePair> tags = SpanHelper.getTags(span);
-        assertThat(tags.get(1).getValue(), is("FindOperation {\"name\": \"by\"}"));
+        assertThat(tags.get(1).getValue(), is("{\"name\": \"by\"}"));
         assertThat(tags.get(0).getValue(), is("MongoDB"));
         assertThat(span.isExit(), is(true));
         assertThat(SpanHelper.getLayer(span), CoreMatchers.is(SpanLayer.DB));
